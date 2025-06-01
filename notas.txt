@@ -1,0 +1,11 @@
+VER DE BUSCAR UN MEJOR FAVICON
+
+preguntar tema nav
+
+preguntar si debe haber home
+
+myprofile y posts lo muestra si esta logueado nomas?
+
+
+
+SACAR TODO LO HARDCODEADO
