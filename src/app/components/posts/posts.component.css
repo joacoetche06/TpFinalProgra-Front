@@ -1,0 +1,39 @@
+.posts-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+h2 {
+  color: #c62828;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.post {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  border-left: 5px solid #c62828;
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.post-user-img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #c62828;
+}
+
+p {
+  margin: 0;
+}

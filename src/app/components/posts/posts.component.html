@@ -1,0 +1,24 @@
+<div class="posts-container">
+  <h2>Publicaciones</h2>
+
+  <div *ngIf="posts as postList">
+    <div *ngIf="postList.length > 0; else noPosts">
+      <div class="post" *ngFor="let post of postList">
+        <div class="post-header">
+          <img [src]="post.userImage" alt="user" class="post-user-img" />
+          <div>
+            <h4>{{ post.username }}</h4>
+            <small>{{ post.date | date : "short" }}</small>
+          </div>
+        </div>
+        <p>{{ post.content }}</p>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noPosts>
+    <p style="text-align: center; color: #999">
+      No hay publicaciones disponibles.
+    </p>
+  </ng-template>
+</div>
