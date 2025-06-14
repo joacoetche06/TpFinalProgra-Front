@@ -27,3 +27,56 @@ p {
   margin: 8px 0;
   color: #333;
 }
+
+/* Para las publicaciones dentro del perfil */
+.profile-post {
+  margin-top: 20px;
+  padding: 15px;
+  border-top: 2px solid #eee;
+  text-align: left;
+}
+
+.profile-post strong {
+  color: #c62828;
+}
+
+.profile-post ul {
+  margin-top: 10px;
+  padding-left: 20px;
+}
+
+.profile-post li {
+  margin-bottom: 5px;
+  color: #555;
+}
+
+/* Para las publicaciones dentro del perfil */
+.profile-post {
+  margin-top: 20px;
+  padding: 15px;
+  border-top: 2px solid #eee;
+  text-align: left;
+}
+
+.profile-post strong {
+  color: #c62828;
+}
+
+.profile-post ul {
+  margin-top: 10px;
+  padding-left: 20px;
+}
+
+.profile-post li {
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.post-card {
+  background: #fefefe;
+  border: 1px solid #ddd;
+  padding: 0.2rem;
+  margin-top: 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 4px rgba(200, 0, 0, 0.1);
+}

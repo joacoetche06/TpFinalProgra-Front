@@ -1,97 +1,151 @@
-<div class="registro-container">
-  <h2>Crear Cuenta</h2>
-  <form (ngSubmit)="onSubmit()" #registroForm="ngForm">
-    <label for="firstName">Nombre</label>
-    <input
-      type="text"
-      id="firstName"
-      name="firstName"
-      [(ngModel)]="firstName"
-      required
-      placeholder="Juan"
-    />
+<form (ngSubmit)="onSubmit()" #registroForm="ngForm" class="registro-container">
+  <label for="firstName">Nombre <span class="required">*</span></label>
+  <input
+    type="text"
+    id="firstName"
+    name="firstName"
+    [(ngModel)]="firstName"
+    required
+    #firstNameRef="ngModel"
+    minlength="2"
+    [class.invalid]="firstNameRef.invalid && firstNameRef.touched"
+    placeholder="Juan"
+  />
+  <div *ngIf="firstNameRef.invalid && firstNameRef.touched" class="error-msg">
+    <div *ngIf="firstNameRef.errors?.['required']">
+      El nombre es obligatorio.
+    </div>
+    <div *ngIf="firstNameRef.errors?.['minlength']">
+      El nombre debe tener al menos 2 caracteres.
+    </div>
+  </div>
 
-    <label for="lastName">Apellido</label>
-    <input
-      type="text"
-      id="lastName"
-      name="lastName"
-      [(ngModel)]="lastName"
-      required
-      placeholder="Pérez"
-    />
+  <label for="lastName">Apellido <span class="required">*</span></label>
+  <input
+    type="text"
+    id="lastName"
+    name="lastName"
+    [(ngModel)]="lastName"
+    required
+    #lastNameRef="ngModel"
+    minlength="2"
+    [class.invalid]="lastNameRef.invalid && lastNameRef.touched"
+    placeholder="Pérez"
+  />
+  <div *ngIf="lastNameRef.invalid && lastNameRef.touched" class="error-msg">
+    <div *ngIf="lastNameRef.errors?.['required']">
+      El apellido es obligatorio.
+    </div>
+    <div *ngIf="lastNameRef.errors?.['minlength']">
+      El apellido debe tener al menos 2 caracteres.
+    </div>
+  </div>
 
-    <label for="email">Correo electrónico</label>
-    <input
-      type="email"
-      id="email"
-      name="email"
-      [(ngModel)]="email"
-      required
-      placeholder="ejemplo@correo.com"
-    />
+  <label for="email">Correo electrónico <span class="required">*</span></label>
+  <input
+    type="email"
+    id="email"
+    name="email"
+    [(ngModel)]="email"
+    required
+    email
+    #emailRef="ngModel"
+    [class.invalid]="emailRef.invalid && emailRef.touched"
+    placeholder="ejemplo@correo.com"
+  />
+  <div *ngIf="emailRef.invalid && emailRef.touched" class="error-msg">
+    <div *ngIf="emailRef.errors?.['required']">El correo es obligatorio.</div>
+    <div *ngIf="emailRef.errors?.['email']">Formato de correo no válido.</div>
+  </div>
 
-    <label for="username">Nombre de usuario</label>
-    <input
-      type="text"
-      id="username"
-      name="username"
-      [(ngModel)]="username"
-      required
-      placeholder="juanp123"
-    />
+  <label for="username"
+    >Nombre de usuario <span class="required">*</span></label
+  >
+  <input
+    type="text"
+    id="username"
+    name="username"
+    [(ngModel)]="username"
+    required
+    #usernameRef="ngModel"
+    [class.invalid]="usernameRef.invalid && usernameRef.touched"
+    placeholder="juanp123"
+  />
+  <div *ngIf="usernameRef.invalid && usernameRef.touched" class="error-msg">
+    El nombre de usuario es obligatorio.
+  </div>
 
-    <label for="birthDate">Fecha de nacimiento</label>
-    <input
-      type="date"
-      id="birthDate"
-      name="birthDate"
-      [(ngModel)]="birthDate"
-      required
-    />
+  <label for="birthDate">Fecha de nacimiento</label>
+  <input type="date" id="birthDate" name="birthDate" [(ngModel)]="birthDate" />
 
-    <label for="bio">Descripción breve</label>
-    <textarea
-      id="bio"
-      name="bio"
-      [(ngModel)]="bio"
-      placeholder="Contanos algo sobre vos"
-    ></textarea>
+  <label for="bio">Descripción breve</label>
+  <textarea
+    id="bio"
+    name="bio"
+    [(ngModel)]="bio"
+    placeholder="Contanos algo sobre vos"
+  ></textarea>
 
-    <label for="profileImage">Imagen de perfil</label>
-    <input
-      type="file"
-      id="profileImage"
-      (change)="onFileSelected($event)"
-      accept="image/*"
-    />
+  <label for="profileImage">Imagen de perfil</label>
+  <input
+    type="file"
+    id="profileImage"
+    (change)="onFileSelected($event)"
+    accept="image/*"
+    class="form-control"
+  />
 
-    <label for="password">Contraseña</label>
-    <input
-      type="password"
-      id="password"
-      name="password"
-      [(ngModel)]="password"
-      required
-      pattern="^(?=.*[A-Z])(?=.*\d).{8,}$"
-      placeholder="********"
-    />
+  <label for="password">Contraseña <span class="required">*</span></label>
+  <input
+    type="password"
+    id="password"
+    name="password"
+    [(ngModel)]="password"
+    required
+    pattern="^(?=.*[A-Z])(?=.*\d).{8,}$"
+    #passwordRef="ngModel"
+    [class.invalid]="passwordRef.invalid && passwordRef.touched"
+    placeholder="********"
+  />
+  <div *ngIf="passwordRef.invalid && passwordRef.touched" class="error-msg">
+    <div *ngIf="passwordRef.errors?.['required']">
+      La contraseña es obligatoria.
+    </div>
+    <div *ngIf="passwordRef.errors?.['pattern']">
+      Debe tener al menos 8 caracteres, una mayúscula y un número.
+    </div>
+  </div>
 
-    <label for="confirmPassword">Confirmar contraseña</label>
-    <input
-      type="password"
-      id="confirmPassword"
-      name="confirmPassword"
-      [(ngModel)]="confirmPassword"
-      required
-      placeholder="********"
-    />
+  <label for="confirmPassword"
+    >Confirmar contraseña <span class="required">*</span></label
+  >
+  <input
+    type="password"
+    id="confirmPassword"
+    name="confirmPassword"
+    [(ngModel)]="confirmPassword"
+    required
+    #confirmPasswordRef="ngModel"
+    [class.invalid]="confirmPasswordRef.touched && password !== confirmPassword"
+    placeholder="********"
+  />
+  <div
+    *ngIf="confirmPasswordRef.invalid && confirmPasswordRef.touched"
+    class="error-msg"
+  >
+    Debes confirmar tu contraseña.
+  </div>
+  <div
+    *ngIf="confirmPasswordRef.touched && password !== confirmPassword"
+    class="error-msg"
+  >
+    Las contraseñas no coinciden.
+  </div>
 
-    <div *ngIf="error" class="error-msg">{{ error }}</div>
+  <div *ngIf="error" class="error-msg">{{ error }}</div>
 
-    <button type="submit">Registrarse</button>
-    <p class="register-link">
-      ¿Ya tienes cuenta? <a routerLink="/login">Inicia Sesión</a>
-    </p>
-  </form>
-</div>
+  <button type="submit" [disabled]="registroForm.invalid">Registrarse</button>
+  <p class="register-link">
+    ¿Ya tienes cuenta? <a routerLink="/login">Inicia Sesión</a>
+  </p>
+</form>

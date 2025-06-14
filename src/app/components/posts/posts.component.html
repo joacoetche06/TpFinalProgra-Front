@@ -1,4 +1,4 @@
-<div class="posts-container">
+<!-- <div class="posts-container">
   <h2>Publicaciones</h2>
 
   <div *ngIf="posts as postList">
@@ -21,4 +21,51 @@
       No hay publicaciones disponibles.
     </p>
   </ng-template>
+</div> -->
+
+<!-- src/app/pages/posts/posts.component.html -->
+
+<select [(ngModel)]="ordenSeleccionado" (change)="cargarPublicaciones()">
+  <option value="fecha">Ordenar por fecha</option>
+  <option value="likes">Ordenar por me gusta</option>
+</select>
+<div *ngIf="publicaciones.length > 0; else noPosts">
+  <div *ngFor="let post of publicaciones" class="post-card">
+    <p><strong>Autor:</strong> {{ post.autor }}</p>
+    <p><strong>Contenido:</strong> {{ post.contenido }}</p>
+    <p><strong>Fecha:</strong> {{ post.createdAt | date : "short" }}</p>
+
+    <button (click)="toggleLike(post)">
+      <ng-container *ngIf="tieneLike(post); else likeIcon">
+        <i class="bi bi-hand-thumbs-up-fill"></i>
+      </ng-container>
+      <ng-template #likeIcon>
+        <i class="bi bi-hand-thumbs-up"></i>
+      </ng-template>
+      {{ post.meGusta.length }}
+    </button>
+
+    <div *ngIf="post.comentarios?.length">
+      <p><strong>Comentarios:</strong></p>
+      <ul>
+        <li *ngFor="let comentario of post.comentarios">
+          {{ comentario.autor }}: {{ comentario.texto }}
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Paginación -->
 </div>
+<div class="paginacion">
+  <p>Pagina {{ paginaActual }}</p>
+  <button (click)="anteriorPagina()" [disabled]="paginaActual === 1">
+    Anterior
+  </button>
+  <button (click)="siguientePagina()" [disabled]="!hayMasPaginas">
+    Siguiente
+  </button>
+</div>
+<ng-template #noPosts>
+  <p class="post-card">No hay publicaciones disponibles.</p>
+</ng-template>

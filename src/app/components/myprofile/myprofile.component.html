@@ -1,13 +1,31 @@
-<div class="profile-container">
-  <img
-    [src]="user.profileImageUrl"
-    alt="Imagen de perfil"
-    class="profile-img"
-  />
-  <h2>{{ user.firstName }} {{ user.lastName }}</h2>
-  <p><strong>Nombre de usuario:</strong> {{ user.username }}</p>
-  <p><strong>Correo:</strong> {{ user.email }}</p>
-  <p><strong>Fecha de nacimiento:</strong> {{ user.birthDate }}</p>
-  <p><strong>Descripción:</strong> {{ user.bio }}</p>
-  <p><strong>Perfil:</strong> {{ user.role }}</p>
+<div class="profile-container" *ngIf="usuario">
+  <img [src]="usuario.foto" alt="Foto de perfil" class="profile-img" />
+  <h2>{{ usuario.nombre }}</h2>
+  <p><strong>Email:</strong> {{ usuario.email }}</p>
+
+  <hr />
+
+  <div *ngIf="publicaciones.length > 0">
+    <h3 style="color: #c62828">Mis últimas publicaciones</h3>
+    <div *ngFor="let post of publicaciones" class="post-card">
+      <p><strong>Contenido:</strong> {{ post.contenido }}</p>
+      <p><strong>Fecha:</strong> {{ post.createdAt | date : "short" }}</p>
+
+      <div *ngIf="post.comentarios?.length">
+        <p><strong>Comentarios:</strong></p>
+        <ul>
+          <li
+            *ngFor="let comentario of post.comentarios"
+            style="list-style-type: none"
+          >
+            {{ comentario.autor }}: {{ comentario.texto }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="publicaciones.length === 0">
+    <p style="color: #777">Aún no tenés publicaciones.</p>
+  </div>
 </div>

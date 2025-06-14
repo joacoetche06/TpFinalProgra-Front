@@ -19,8 +19,20 @@
       name="password"
       [(ngModel)]="password"
       required
+      pattern="^(?=.*[A-Z])(?=.*\d).{8,}$"
+      #passwordRef="ngModel"
       placeholder="********"
     />
+
+    <div *ngIf="passwordRef.invalid && passwordRef.touched" class="error-msg">
+      <div *ngIf="passwordRef.errors?.['required']">
+        La contraseña es obligatoria.
+      </div>
+      <div *ngIf="passwordRef.errors?.['pattern']">
+        La contraseña debe tener al menos 8 caracteres, una mayúscula y un
+        número.
+      </div>
+    </div>
 
     <div *ngIf="error" class="error-msg">{{ error }}</div>
 
