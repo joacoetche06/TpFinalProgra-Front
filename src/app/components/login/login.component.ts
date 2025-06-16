@@ -1,18 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
 import {
   FormBuilder,
   FormGroup,
   FormsModule,
   Validators,
 } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
@@ -22,27 +22,22 @@ export class LoginComponent {
   password = '';
   error: string | null = null;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
   onSubmit(): void {
     this.error = null;
 
-    // Validación simulada
     if (!this.usernameOrEmail || !this.password) {
       this.error = 'Por favor, completa todos los campos.';
       return;
     }
 
-    // Ejemplo simulado, reemplazalo con llamada HTTP al backend más adelante
-    if (
-      (this.usernameOrEmail === 'admin' ||
-        this.usernameOrEmail === 'admin@correo.com') &&
-      this.password === 'Admin123'
-    ) {
-      console.log('Inicio de sesión exitoso');
-      this.router.navigate(['/posts']); // Redirige a publicaciones o home
-    } else {
-      this.error = 'Usuario o contraseña incorrectos.';
-    }
+    this.authService
+      .login(this.usernameOrEmail, this.password)
+      .then(() => this.router.navigate(['/posts']))
+      .catch((err) => {
+        console.log(err);
+        this.error = typeof err === 'string' ? err : 'Error al iniciar sesión';
+      });
   }
 }

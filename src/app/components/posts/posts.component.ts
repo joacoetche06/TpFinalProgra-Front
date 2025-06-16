@@ -21,7 +21,7 @@ export class PostsComponent implements OnInit {
   usuarioActualId: string = 'tu_id_de_usuario'; // esto se debería obtener del token o authService
   hayMasPaginas: boolean = true;
 
-  modoMock: boolean = true; // cambiar a false si querés probar con API real
+  modoMock: boolean = false; // cambiar a false si quiero usar API real
 
   constructor(private postService: PostService) {}
 

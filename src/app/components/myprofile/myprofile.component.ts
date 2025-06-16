@@ -37,7 +37,10 @@ export class MyProfileComponent implements OnInit {
           contenido: 'Mi primer post',
           autor: 'Joaquín',
           meGusta: ['123'],
-          comentarios: [{ autor: 'Ana', texto: 'Genial!' }],
+          comentarios: [
+            { autor: 'Ana', texto: 'Genial!' },
+            { autor: 'Pia', texto: 'Que bueno!' },
+          ],
           createdAt: '2025-06-13T10:00:00Z',
         },
         {
