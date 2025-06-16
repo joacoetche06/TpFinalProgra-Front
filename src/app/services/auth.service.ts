@@ -31,7 +31,7 @@ export class AuthService {
     } else {
       // Modo real
       return this.http
-        .post<any>(`${this.apiUrl}/login`, {
+        .post<any>(`${this.apiUrl}/auth/login`, {
           nombreUsuarioOEmail: usernameOrEmail,
           password,
         })
