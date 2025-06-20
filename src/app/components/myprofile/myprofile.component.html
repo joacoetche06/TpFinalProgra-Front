@@ -8,7 +8,7 @@
   <div *ngIf="publicaciones.length > 0">
     <h3 style="color: #c62828">Mis últimas publicaciones</h3>
     <div *ngFor="let post of publicaciones" class="post-card">
-      <p><strong>Contenido:</strong> {{ post.contenido }}</p>
+      <p><strong>Contenido:</strong> {{ post.descripcion }}</p>
       <p><strong>Fecha:</strong> {{ post.createdAt | date : "short" }}</p>
 
       <div *ngIf="post.comentarios?.length">

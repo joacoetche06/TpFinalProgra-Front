@@ -32,7 +32,7 @@
 <div *ngIf="publicaciones.length > 0; else noPosts">
   <div *ngFor="let post of publicaciones" class="post-card">
     <p><strong>Autor:</strong> {{ post.autor }}</p>
-    <p><strong>Contenido:</strong> {{ post.contenido }}</p>
+    <p><strong>Contenido:</strong> {{ post.descripcion }}</p>
     <p><strong>Fecha:</strong> {{ post.createdAt | date : "short" }}</p>
 
     <button (click)="toggleLike(post)">

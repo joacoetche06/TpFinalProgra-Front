@@ -1,10 +1,12 @@
 // src/app/pages/posts/posts.component.ts
 import { Component, OnInit } from '@angular/core';
 import { Post } from '../../lib/interfaces';
-import { PostService } from '../../services/post.service';
+import { PostService } from '../../services/post/post.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+// import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../services/auth/auth.service';
+import { Usuario } from '../../lib/interfaces';
 
 @Component({
   selector: 'app-posts',
@@ -20,15 +22,18 @@ export class PostsComponent implements OnInit {
   limite: number = 5;
   usuarioActualId: string = 'tu_id_de_usuario'; // esto se debería obtener del token o authService
   hayMasPaginas: boolean = true;
-
+  totalPublicaciones: number = 0;
   modoMock: boolean = false; // cambiar a false si quiero usar API real
 
-  constructor(private postService: PostService) {}
+  constructor(
+    private postService: PostService,
+    private authService: AuthService
+  ) {}
 
   todasLasPublicaciones: Post[] = [
     {
       _id: '1',
-      contenido: 'Primer post',
+      descripcion: 'Primer post',
       autor: 'Juan',
       meGusta: ['123', '456'],
       comentarios: [
@@ -39,7 +44,7 @@ export class PostsComponent implements OnInit {
     },
     {
       _id: '2',
-      contenido: 'Segundo post',
+      descripcion: 'Segundo post',
       autor: 'Maria',
       meGusta: ['456'],
       comentarios: [],
@@ -47,7 +52,7 @@ export class PostsComponent implements OnInit {
     },
     {
       _id: '3',
-      contenido: 'Otro post más',
+      descripcion: 'Otro post más',
       autor: 'Joaquin',
       meGusta: [],
       comentarios: [],
@@ -55,7 +60,7 @@ export class PostsComponent implements OnInit {
     },
     {
       _id: '4',
-      contenido: 'Primer post',
+      descripcion: 'Primer post',
       autor: 'Juan',
       meGusta: ['123', '456'],
       comentarios: [
@@ -66,7 +71,7 @@ export class PostsComponent implements OnInit {
     },
     {
       _id: '5',
-      contenido: 'Segundo post',
+      descripcion: 'Segundo post',
       autor: 'Maria',
       meGusta: ['456'],
       comentarios: [],
@@ -74,7 +79,7 @@ export class PostsComponent implements OnInit {
     },
     {
       _id: '6',
-      contenido: 'Otro post más',
+      descripcion: 'Otro post más',
       autor: 'Joaquin',
       meGusta: [],
       comentarios: [],
@@ -82,7 +87,7 @@ export class PostsComponent implements OnInit {
     },
     {
       _id: '7',
-      contenido: 'Primer post',
+      descripcion: 'Primer post',
       autor: 'Juan',
       meGusta: ['123', '456'],
       comentarios: [
@@ -93,7 +98,7 @@ export class PostsComponent implements OnInit {
     },
     {
       _id: '8',
-      contenido: 'Segundo post',
+      descripcion: 'Segundo post',
       autor: 'Maria',
       meGusta: ['456'],
       comentarios: [],
@@ -101,7 +106,7 @@ export class PostsComponent implements OnInit {
     },
     {
       _id: '9',
-      contenido: 'Otro post más',
+      descripcion: 'Otro post más',
       autor: 'Joaquin',
       meGusta: [],
       comentarios: [],
@@ -111,12 +116,13 @@ export class PostsComponent implements OnInit {
   ];
 
   ngOnInit(): void {
+    const id = this.authService.getUserId();
+    if (id) this.usuarioActualId = id;
     this.cargarPublicaciones();
   }
 
   cargarPublicaciones(): void {
     if (this.modoMock) {
-      console.log('hola');
       let publicacionesOrdenadas = [...this.todasLasPublicaciones];
 
       if (this.ordenSeleccionado === 'fecha') {
@@ -134,19 +140,26 @@ export class PostsComponent implements OnInit {
       const fin = inicio + this.limite;
       this.publicaciones = publicacionesOrdenadas.slice(inicio, fin);
       this.hayMasPaginas = publicacionesOrdenadas.length > fin;
-    } else {
-      this.postService
-        .getPublicaciones(
-          this.ordenSeleccionado,
-          this.paginaActual,
-          this.limite
-        )
-        .subscribe((data: Post[]) => {
-          this.publicaciones = data;
-          this.hayMasPaginas = data.length === this.limite;
-        });
-    }
+    }else {
+  this.postService
+    .getPublicaciones(this.ordenSeleccionado, this.paginaActual, this.limite)
+    .subscribe((data: { posts: Post[]; total: number }) => {
+      this.publicaciones = data.posts.map(post => ({
+        ...post,
+        autor: this.getNombreAutor(post.autor)
+      }));
+      this.totalPublicaciones = data.total;
+      this.hayMasPaginas = data.posts.length === this.limite;
+    });
+}
   }
+
+  getNombreAutor(autor: string | Usuario): string {
+  if (typeof autor === 'string') {
+    return autor;
+  }
+  return autor.nombreUsuario || 'Anónimo';
+}
 
   siguientePagina(): void {
     this.paginaActual++;

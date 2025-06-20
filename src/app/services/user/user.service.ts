@@ -1,7 +1,7 @@
 // src/app/services/user.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Usuario } from '../lib/interfaces';
+import { Usuario } from '../../lib/interfaces';
 import { Observable, of } from 'rxjs';
 
 @Injectable({
@@ -17,6 +17,7 @@ export class UserService {
       const mockUsuario: Usuario = {
         _id: '123',
         nombre: 'Joaquín Etchegaray',
+        nombreUsuario: 'Joacoetche2111',
         email: 'joaco@correo.com',
         foto: 'https://via.placeholder.com/150',
       };

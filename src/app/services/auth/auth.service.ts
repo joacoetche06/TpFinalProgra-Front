@@ -1,18 +1,22 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-// import { environment } from 'src/environments/environment';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000'; // o el prefijo real de tus rutas
+  private apiUrl = 'http://localhost:3000';
   private modoMock = false;
+
   constructor(private http: HttpClient) {}
+
+  private isBrowser(): boolean {
+    return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+  }
 
   login(usernameOrEmail: string, password: string) {
     if (this.modoMock) {
-      // Modo simulado
       if (
         (usernameOrEmail === 'admin' ||
           usernameOrEmail === 'admin@correo.com') &&
@@ -29,7 +33,6 @@ export class AuthService {
         return Promise.reject('Usuario o contraseña incorrectos');
       }
     } else {
-      // Modo real
       return this.http
         .post<any>(`${this.apiUrl}/auth/login`, {
           nombreUsuarioOEmail: usernameOrEmail,
@@ -44,21 +47,32 @@ export class AuthService {
     }
   }
 
-  logout() {
-    localStorage.removeItem('usuario');
-    localStorage.removeItem('token');
-  }
-
   getToken(): string | null {
+    if (!this.isBrowser()) return null;
     return localStorage.getItem('token');
   }
 
   getUsuario(): any {
+    if (!this.isBrowser()) return null;
     const user = localStorage.getItem('usuario');
     return user ? JSON.parse(user) : null;
+  }
+
+  logout() {
+    if (this.isBrowser()) {
+      localStorage.removeItem('usuario');
+      localStorage.removeItem('token');
+    }
   }
 
   isLoggedIn(): boolean {
     return !!this.getToken();
   }
+
+  // 🔽 MÉTODO NUEVO: obtener el ID desde el JWT
+  getUserId(): string | null {
+  const usuario = this.getUsuario();
+  return usuario && usuario._id ? usuario._id : null;
+}
+
 }

@@ -2,8 +2,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Usuario, Post } from '../../lib/interfaces';
-import { UserService } from '../../services/user.service';
-import { PostService } from '../../services/post.service';
+import { UserService } from '../../services/user/user.service';
+import { PostService } from '../../services/post/post.service';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-myprofile',
@@ -13,13 +14,14 @@ import { PostService } from '../../services/post.service';
   styleUrls: ['./myprofile.component.css'],
 })
 export class MyProfileComponent implements OnInit {
-  modoMock = true;
+  modoMock = false;
   usuario: Usuario | null = null;
   publicaciones: Post[] = [];
 
   constructor(
     private userService: UserService,
-    private postService: PostService
+    private postService: PostService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -27,6 +29,7 @@ export class MyProfileComponent implements OnInit {
       this.usuario = {
         _id: '123',
         nombre: 'Joaquín',
+        nombreUsuario: 'Joacoetche',
         email: 'joaco@correo.com',
         foto: '/favicon2.png',
       };
@@ -34,7 +37,7 @@ export class MyProfileComponent implements OnInit {
       const todas: Post[] = [
         {
           _id: '1',
-          contenido: 'Mi primer post',
+          descripcion: 'Mi primer post',
           autor: 'Joaquín',
           meGusta: ['123'],
           comentarios: [
@@ -45,7 +48,7 @@ export class MyProfileComponent implements OnInit {
         },
         {
           _id: '2',
-          contenido: 'Otro más',
+          descripcion: 'Otro más',
           autor: 'Joaquín',
           meGusta: [],
           comentarios: [],
@@ -53,7 +56,7 @@ export class MyProfileComponent implements OnInit {
         },
         {
           _id: '3',
-          contenido: 'Último post',
+          descripcion: 'Último post',
           autor: 'Joaquín',
           meGusta: [],
           comentarios: [],
@@ -61,7 +64,7 @@ export class MyProfileComponent implements OnInit {
         },
         {
           _id: '4',
-          contenido: 'Este no se ve',
+          descripcion: 'Este no se ve',
           autor: 'Joaquín',
           meGusta: [],
           comentarios: [],
@@ -76,13 +79,18 @@ export class MyProfileComponent implements OnInit {
         )
         .slice(0, 3);
     } else {
-      this.userService.getMiPerfil().subscribe((usuario) => {
-        this.usuario = usuario;
-      });
-      //despues modificar esto para que resiva cantidad
-      this.postService.getMisPublicaciones('3').subscribe((posts) => {
-        this.publicaciones = posts;
-      });
-    }
+  this.userService.getMiPerfil().subscribe((usuario) => {
+    this.usuario = usuario;
+  });
+
+  const userId = this.authService.getUserId(); // ✅ obtiene el ID desde el token
+
+  if (userId) {
+    this.postService.getPostsByUser(userId, 3).subscribe((posts) => {
+      this.publicaciones = posts;
+    });
+  }
+}
+
   }
 }
