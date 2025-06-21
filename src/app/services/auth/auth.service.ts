@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -9,13 +10,30 @@ export class AuthService {
   private apiUrl = 'http://localhost:3000';
   private modoMock = false;
 
-  constructor(private http: HttpClient) {}
-
-  private isBrowser(): boolean {
-    return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+  constructor(
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    this.initializeAuthState();
   }
 
-  login(usernameOrEmail: string, password: string) {
+  private initializeAuthState() {
+    if (this.isBrowser()) {
+      // Recupera el estado de autenticación al iniciar el servicio
+      this.token = localStorage.getItem('token');
+      const userData = localStorage.getItem('usuario');
+      this.usuario = userData ? JSON.parse(userData) : null;
+    }
+  }
+
+  private isBrowser(): boolean {
+    return isPlatformBrowser(this.platformId);
+  }
+
+  private token: string | null = null;
+  private usuario: any = null;
+
+  async login(usernameOrEmail: string, password: string) {
     if (this.modoMock) {
       if (
         (usernameOrEmail === 'admin' ||
@@ -40,22 +58,33 @@ export class AuthService {
         })
         .toPromise()
         .then((res) => {
-          localStorage.setItem('usuario', JSON.stringify(res.data));
-          localStorage.setItem('token', res.access_token);
+          if (this.isBrowser()) {
+            localStorage.setItem('token', res.access_token);
+            localStorage.setItem('usuario', JSON.stringify(res.data));
+          }
+          // Actualiza las propiedades internas
+          this.token = res.access_token;
+          this.usuario = res.data;
+          console.log('Login exitoso. Token:', res.access_token);
           return res;
         });
     }
   }
 
   getToken(): string | null {
-    if (!this.isBrowser()) return null;
-    return localStorage.getItem('token');
+    return this.token;
   }
 
   getUsuario(): any {
-    if (!this.isBrowser()) return null;
-    const user = localStorage.getItem('usuario');
-    return user ? JSON.parse(user) : null;
+    return this.usuario;
+  }
+
+  getUserId(): string | null {
+    return this.usuario?._id || null;
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.token && !this.isTokenExpired(this.token);
   }
 
   logout() {
@@ -63,6 +92,8 @@ export class AuthService {
       localStorage.removeItem('usuario');
       localStorage.removeItem('token');
     }
+    this.token = null;
+    this.usuario = null;
   }
 
   isTokenExpired(token: string): boolean {
@@ -71,14 +102,11 @@ export class AuthService {
     return decoded.exp < now;
   }
 
-  isLoggedIn(): boolean {
-    const token = this.getToken();
-    return !!token && !this.isTokenExpired(token);
-  }
-
-  // 🔽 MÉTODO NUEVO: obtener el ID desde el JWT
-  getUserId(): string | null {
-    const usuario = this.getUsuario();
-    return usuario && usuario._id ? usuario._id : null;
+  async waitForAuthInit(): Promise<void> {
+    if (this.isBrowser() && localStorage.getItem('token')) {
+      return Promise.resolve();
+    }
+    // Espera breve si no hay token inmediatamente
+    return new Promise((resolve) => setTimeout(resolve, 100));
   }
 }

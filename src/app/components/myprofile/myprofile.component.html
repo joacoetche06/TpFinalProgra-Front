@@ -10,6 +10,7 @@
     <div *ngFor="let post of publicaciones" class="post-card">
       <p><strong>Contenido:</strong> {{ post.descripcion }}</p>
       <p><strong>Fecha:</strong> {{ post.createdAt | date : "short" }}</p>
+      <p><strong>Likes:</strong> {{ post.meGusta.length }}</p>
 
       <div *ngIf="post.comentarios?.length">
         <p><strong>Comentarios:</strong></p>

@@ -1,4 +1,4 @@
-// src/app/pages/posts/posts.component.ts
+// src/app/components/posts/posts.component.ts
 import { Component, OnInit } from '@angular/core';
 import { Post } from '../../lib/interfaces';
 import { PostService } from '../../services/post/post.service';
@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 // import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth/auth.service';
 import { Usuario } from '../../lib/interfaces';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-posts',
@@ -20,12 +21,13 @@ export class PostsComponent implements OnInit {
   ordenSeleccionado: 'fecha' | 'likes' = 'fecha';
   paginaActual: number = 1;
   limite: number = 5;
-  usuarioActualId: string = 'tu_id_de_usuario'; // esto se debería obtener del token o authService
+  usuarioActualId: string = 'id_de_usuario'; // esto se debería obtener del token o authService
   hayMasPaginas: boolean = true;
   totalPublicaciones: number = 0;
-  modoMock: boolean = false; // cambiar a false si quiero usar API real
+  modoMock: boolean = false; // cambiar a false si quiero usar backend
 
   constructor(
+    private router: Router,
     private postService: PostService,
     private authService: AuthService
   ) {}
@@ -116,9 +118,20 @@ export class PostsComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    const id = this.authService.getUserId();
-    if (id) this.usuarioActualId = id;
-    this.cargarPublicaciones();
+    // Verifica si hay sesión activa
+    if (this.authService.isLoggedIn()) {
+      const id = this.authService.getUserId();
+      if (id) {
+        this.usuarioActualId = id;
+        this.cargarPublicaciones();
+      } else {
+        console.error('ID de usuario no disponible');
+        this.router.navigate(['/login']);
+      }
+    } else {
+      console.warn('Usuario no autenticado, redirigiendo...');
+      this.router.navigate(['/login']);
+    }
   }
 
   cargarPublicaciones(): void {

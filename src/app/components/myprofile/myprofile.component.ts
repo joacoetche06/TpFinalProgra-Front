@@ -14,7 +14,7 @@ import { AuthService } from '../../services/auth/auth.service';
   styleUrls: ['./myprofile.component.css'],
 })
 export class MyProfileComponent implements OnInit {
-  modoMock = false;
+  modoMock = true;
   usuario: Usuario | null = null;
   publicaciones: Post[] = [];
 
@@ -59,7 +59,10 @@ export class MyProfileComponent implements OnInit {
           descripcion: 'Último post',
           autor: 'Joaquín',
           meGusta: [],
-          comentarios: [],
+          comentarios: [
+            { autor: 'Ana', texto: 'Genial!' },
+            { autor: 'Pia', texto: 'Que bueno!' },
+          ],
           createdAt: '2025-06-11T08:00:00Z',
         },
         {
@@ -79,18 +82,17 @@ export class MyProfileComponent implements OnInit {
         )
         .slice(0, 3);
     } else {
-  this.userService.getMiPerfil().subscribe((usuario) => {
-    this.usuario = usuario;
-  });
+      this.userService.getMiPerfil().subscribe((usuario) => {
+        this.usuario = usuario;
+      });
 
-  const userId = this.authService.getUserId(); // ✅ obtiene el ID desde el token
+      const userId = this.authService.getUserId(); // ✅ obtiene el ID desde el token
 
-  if (userId) {
-    this.postService.getPostsByUser(userId, 3).subscribe((posts) => {
-      this.publicaciones = posts;
-    });
-  }
-}
-
+      if (userId) {
+        this.postService.getPostsByUser(userId, 3).subscribe((posts) => {
+          this.publicaciones = posts;
+        });
+      }
+    }
   }
 }
