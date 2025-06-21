@@ -140,26 +140,30 @@ export class PostsComponent implements OnInit {
       const fin = inicio + this.limite;
       this.publicaciones = publicacionesOrdenadas.slice(inicio, fin);
       this.hayMasPaginas = publicacionesOrdenadas.length > fin;
-    }else {
-  this.postService
-    .getPublicaciones(this.ordenSeleccionado, this.paginaActual, this.limite)
-    .subscribe((data: { posts: Post[]; total: number }) => {
-      this.publicaciones = data.posts.map(post => ({
-        ...post,
-        autor: this.getNombreAutor(post.autor)
-      }));
-      this.totalPublicaciones = data.total;
-      this.hayMasPaginas = data.posts.length === this.limite;
-    });
-}
+    } else {
+      this.postService
+        .getPublicaciones(
+          this.ordenSeleccionado,
+          this.paginaActual,
+          this.limite
+        )
+        .subscribe((data: { posts: Post[]; total: number }) => {
+          this.publicaciones = data.posts.map((post) => ({
+            ...post,
+            autor: this.getNombreAutor(post.autor),
+          }));
+          this.totalPublicaciones = data.total;
+          this.hayMasPaginas = data.posts.length === this.limite;
+        });
+    }
   }
 
   getNombreAutor(autor: string | Usuario): string {
-  if (typeof autor === 'string') {
-    return autor;
+    if (typeof autor === 'string') {
+      return autor;
+    }
+    return autor.nombreUsuario || 'Anónimo';
   }
-  return autor.nombreUsuario || 'Anónimo';
-}
 
   siguientePagina(): void {
     this.paginaActual++;

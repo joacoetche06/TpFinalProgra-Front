@@ -65,14 +65,20 @@ export class AuthService {
     }
   }
 
+  isTokenExpired(token: string): boolean {
+    const decoded: any = jwtDecode(token);
+    const now = Math.floor(Date.now() / 1000);
+    return decoded.exp < now;
+  }
+
   isLoggedIn(): boolean {
-    return !!this.getToken();
+    const token = this.getToken();
+    return !!token && !this.isTokenExpired(token);
   }
 
   // 🔽 MÉTODO NUEVO: obtener el ID desde el JWT
   getUserId(): string | null {
-  const usuario = this.getUsuario();
-  return usuario && usuario._id ? usuario._id : null;
-}
-
+    const usuario = this.getUsuario();
+    return usuario && usuario._id ? usuario._id : null;
+  }
 }
