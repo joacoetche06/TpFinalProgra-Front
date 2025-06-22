@@ -1,7 +1,24 @@
 <div class="profile-container" *ngIf="usuario">
-  <img [src]="usuario.foto" alt="Foto de perfil" class="profile-img" />
-  <h2>{{ usuario.nombre }}</h2>
-  <p><strong>Email:</strong> {{ usuario.email }}</p>
+  <div class="avatar-container">
+    @if (usuario.imagenPerfilUrl && !imageError) {
+    <img
+      [src]="getImageUrl(usuario.imagenPerfilUrl)"
+      alt="Foto de perfil"
+      class="profile-img"
+      (error)="imageError = true"
+    />
+    } @else {
+    <mat-icon class="default-avatar">perm_identity</mat-icon>
+    }
+  </div>
+
+  <div class="profile-info">
+    <p class="username">{{ usuario.nombreUsuario }}</p>
+    <h2>{{ usuario.nombre }}</h2>
+    <p class="email">
+      <strong>Email:</strong> {{ usuario.email || "No disponible" }}
+    </p>
+  </div>
 
   <hr />
 

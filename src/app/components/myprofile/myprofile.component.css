@@ -9,13 +9,30 @@
   border-bottom: 5px solid #c62828;
 }
 
+.profile-img-container {
+  position: relative;
+  margin: 0 auto 15px;
+}
+
 .profile-img {
   width: 120px;
   height: 120px;
   object-fit: cover;
   border-radius: 50%;
-  margin-bottom: 15px;
   border: 3px solid #c62828;
+}
+
+.profile-icon {
+  width: 120px;
+  height: 120px;
+  font-size: 120px;
+  color: #c62828;
+  border-radius: 50%;
+  border: 3px solid #c62828;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
 }
 
 h2 {
@@ -28,55 +45,68 @@ p {
   color: #333;
 }
 
-/* Para las publicaciones dentro del perfil */
-.profile-post {
-  margin-top: 20px;
-  padding: 15px;
-  border-top: 2px solid #eee;
-  text-align: left;
-}
-
-.profile-post strong {
-  color: #c62828;
-}
-
-.profile-post ul {
-  margin-top: 10px;
-  padding-left: 20px;
-}
-
-.profile-post li {
-  margin-bottom: 5px;
-  color: #555;
-}
-
-/* Para las publicaciones dentro del perfil */
-.profile-post {
-  margin-top: 20px;
-  padding: 15px;
-  border-top: 2px solid #eee;
-  text-align: left;
-}
-
-.profile-post strong {
-  color: #c62828;
-}
-
-.profile-post ul {
-  margin-top: 10px;
-  padding-left: 20px;
-}
-
-.profile-post li {
-  margin-bottom: 5px;
-  color: #555;
-}
-
 .post-card {
   background: #fefefe;
   border: 1px solid #ddd;
-  padding: 0.1rem;
+  padding: 15px;
   margin-top: 1rem;
   border-radius: 0.75rem;
   box-shadow: 0 2px 4px rgba(200, 0, 0, 0.1);
+  text-align: left;
+}
+
+.post-card strong {
+  color: #c62828;
+}
+
+.post-card ul {
+  margin-top: 10px;
+  padding-left: 20px;
+}
+
+.post-card li {
+  margin-bottom: 5px;
+  color: #555;
+}
+
+/* Estilos para el contenedor del avatar */
+.avatar-container {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 15px;
+  position: relative;
+}
+
+.profile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #c62828;
+}
+
+.default-avatar {
+  width: 100%;
+  height: 100%;
+  font-size: 120px;
+  color: #c62828;
+  border-radius: 50%;
+  border: 3px solid #c62828;
+}
+
+/* Estilos para la información del perfil */
+.profile-info {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.username {
+  color: #666;
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+}
+
+.email {
+  color: #444;
+  margin-top: 10px;
 }

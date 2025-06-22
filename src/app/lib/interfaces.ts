@@ -18,5 +18,5 @@ export interface Usuario {
   nombre: string;
   nombreUsuario: string;
   email: string;
-  foto: string; // URL de imagen
+  imagenPerfilUrl?: string; // URL de imagen
 }

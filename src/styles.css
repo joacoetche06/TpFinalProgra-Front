@@ -1,7 +1,10 @@
-html, body {
-  background:
-    linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)),
-    url('assets/bg.jpg');
+html,
+body {
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.3),
+      rgba(255, 255, 255, 0.3)
+    ),
+    url("assets/bg.jpg");
   background-repeat: no-repeat;
   background-position: center center;
   background-attachment: fixed;

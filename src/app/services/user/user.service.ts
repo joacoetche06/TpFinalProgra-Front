@@ -4,11 +4,13 @@ import { HttpClient } from '@angular/common/http';
 import { Usuario } from '../../lib/interfaces';
 import { Observable, of } from 'rxjs';
 
+// src/app/services/user.service.ts
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   private modoMock = false;
+  private apiUrl = 'http://localhost:3000/usuarios/my-profile'; // ✅ ruta coherente
 
   constructor(private http: HttpClient) {}
 
@@ -19,11 +21,11 @@ export class UserService {
         nombre: 'Joaquín Etchegaray',
         nombreUsuario: 'Joacoetche2111',
         email: 'joaco@correo.com',
-        foto: 'https://via.placeholder.com/150',
+        imagenPerfilUrl: 'https://via.placeholder.com/150',
       };
       return of(mockUsuario);
     } else {
-      return this.http.get<Usuario>('/api/usuarios/mi-perfil');
+      return this.http.get<Usuario>(this.apiUrl);
     }
   }
 }
