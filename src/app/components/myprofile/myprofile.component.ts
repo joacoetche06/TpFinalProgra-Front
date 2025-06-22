@@ -61,9 +61,11 @@ export class MyProfileComponent implements OnInit {
     });
 
     const userId = this.authService.getUserId();
+    console.log('ID de usuario:', userId);
     if (userId) {
-      this.postService.getPostsByUser(userId, 3).subscribe((posts) => {
-        this.publicaciones = posts;
+      this.postService.getPostsByUser(userId, 3).subscribe((response) => {
+        this.publicaciones = response.posts;
+        console.log('PPublicaciones obtenidos:', this.publicaciones);
       });
     }
   }

@@ -40,8 +40,11 @@ export class PostService {
     return this.http.get<Post[]>(`${this.apiUrl}/user/${userId}?limit=3`);
   }
 
-  getPostsByUser(userId: string, cantidad: number): Observable<Post[]> {
-    return this.http.get<Post[]>(`${this.apiUrl}`, {
+  getPostsByUser(
+    userId: string,
+    cantidad: number
+  ): Observable<{ posts: Post[]; total: number }> {
+    return this.http.get<{ posts: Post[]; total: number }>(`${this.apiUrl}`, {
       params: {
         userId,
         sort: 'fecha',
