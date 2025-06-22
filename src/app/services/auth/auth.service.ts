@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { isPlatformBrowser } from '@angular/common';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -69,6 +70,10 @@ export class AuthService {
           return res;
         });
     }
+  }
+
+  register(userData: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/register`, userData);
   }
 
   getToken(): string | null {
