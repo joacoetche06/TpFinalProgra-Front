@@ -10,7 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-myprofile',
   standalone: true,
-  imports: [CommonModule, MatIconModule], // Añade MatIconModule aquí
+  imports: [CommonModule, MatIconModule],
   templateUrl: './myprofile.component.html',
   styleUrls: ['./myprofile.component.css'],
 })

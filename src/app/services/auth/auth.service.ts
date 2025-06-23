@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class AuthService {
   private apiUrl = 'http://localhost:3000';
-  private modoMock = false;
+  private modoMock = true;
 
   constructor(
     private http: HttpClient,
@@ -63,7 +63,6 @@ export class AuthService {
             localStorage.setItem('token', res.access_token);
             localStorage.setItem('usuario', JSON.stringify(res.data));
           }
-          // Actualiza las propiedades internas
           this.token = res.access_token;
           this.usuario = res.data;
           console.log('Login exitoso. Token:', res.access_token);
@@ -111,7 +110,6 @@ export class AuthService {
     if (this.isBrowser() && localStorage.getItem('token')) {
       return Promise.resolve();
     }
-    // Espera breve si no hay token inmediatamente
     return new Promise((resolve) => setTimeout(resolve, 100));
   }
 }

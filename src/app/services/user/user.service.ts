@@ -10,7 +10,7 @@ import { Observable, of } from 'rxjs';
 })
 export class UserService {
   private modoMock = false;
-  private apiUrl = 'http://localhost:3000/usuarios/my-profile'; // ✅ ruta coherente
+  private apiUrl = 'http://localhost:3000/usuarios/my-profile';
 
   constructor(private http: HttpClient) {}
 

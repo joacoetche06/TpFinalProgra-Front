@@ -21,10 +21,10 @@ export class PostsComponent implements OnInit {
   ordenSeleccionado: 'fecha' | 'likes' = 'fecha';
   paginaActual: number = 1;
   limite: number = 5;
-  usuarioActualId: string = 'id_de_usuario'; // esto se debería obtener del token o authService
+  usuarioActualId: string = 'id_de_usuario';
   hayMasPaginas: boolean = true;
   totalPublicaciones: number = 0;
-  modoMock: boolean = false; // cambiar a false si quiero usar backend
+  modoMock: boolean = false;
 
   constructor(
     private router: Router,
@@ -118,7 +118,6 @@ export class PostsComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    // Verifica si hay sesión activa
     if (this.authService.isLoggedIn()) {
       const id = this.authService.getUserId();
       if (id) {

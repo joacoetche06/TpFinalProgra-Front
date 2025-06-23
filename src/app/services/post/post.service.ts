@@ -14,10 +14,10 @@ export class PostService {
 
   getPublicaciones(
     sortBy: 'fecha' | 'likes',
-    page: number = 1, // Cambiar a página en lugar de offset
+    page: number = 1,
     limit: number = 5
   ): Observable<{ posts: Post[]; total: number }> {
-    const offset = (page - 1) * limit; // Calcular offset internamente
+    const offset = (page - 1) * limit;
     const params = new HttpParams()
       .set('sort', sortBy)
       .set('offset', offset.toString())
