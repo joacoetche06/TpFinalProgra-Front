@@ -9,7 +9,7 @@ import { Observable, of } from 'rxjs';
   providedIn: 'root',
 })
 export class UserService {
-  private modoMock = false;
+  private modoMock = true;
   private apiUrl = 'http://localhost:3000/usuarios/my-profile';
 
   constructor(private http: HttpClient) {}

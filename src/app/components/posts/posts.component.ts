@@ -24,7 +24,7 @@ export class PostsComponent implements OnInit {
   usuarioActualId: string = 'id_de_usuario';
   hayMasPaginas: boolean = true;
   totalPublicaciones: number = 0;
-  modoMock: boolean = false;
+  modoMock: boolean = true;
 
   constructor(
     private router: Router,

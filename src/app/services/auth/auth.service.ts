@@ -20,7 +20,6 @@ export class AuthService {
 
   private initializeAuthState() {
     if (this.isBrowser()) {
-      // Recupera el estado de autenticación al iniciar el servicio
       this.token = localStorage.getItem('token');
       const userData = localStorage.getItem('usuario');
       this.usuario = userData ? JSON.parse(userData) : null;
