@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Post } from '../../lib/interfaces';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,7 @@ import { Post } from '../../lib/interfaces';
 export class PostService {
   private apiUrl = 'http://localhost:3000/posts';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   getPublicaciones(
     sortBy: 'fecha' | 'likes',
@@ -51,6 +52,12 @@ export class PostService {
         offset: 0,
         limit: cantidad.toString(),
       },
+    });
+  }
+
+  getPostById(id: string) {
+    return this.http.get<Post>(`${this.apiUrl}/${id}`, {
+      headers: this.authService.getAuthHeaders() // Necesitarás inyectar AuthService o crear un método similar
     });
   }
 }

@@ -24,7 +24,7 @@ export class PostsComponent implements OnInit {
   usuarioActualId: string = 'id_de_usuario';
   hayMasPaginas: boolean = true;
   totalPublicaciones: number = 0;
-  modoMock: boolean = true;
+  modoMock: boolean = false;
 
   constructor(
     private router: Router,
@@ -32,90 +32,7 @@ export class PostsComponent implements OnInit {
     private authService: AuthService
   ) {}
 
-  todasLasPublicaciones: Post[] = [
-    {
-      _id: '1',
-      descripcion: 'Primer post',
-      autor: 'Juan',
-      meGusta: ['123', '456'],
-      comentarios: [
-        { autor: 'Ana', texto: 'Muy bueno' },
-        { autor: 'Pedro', texto: 'Gracias por compartir' },
-      ],
-      createdAt: '2025-06-13T10:00:00.000Z',
-    },
-    {
-      _id: '2',
-      descripcion: 'Segundo post',
-      autor: 'Maria',
-      meGusta: ['456'],
-      comentarios: [],
-      createdAt: '2025-06-14T12:00:00.000Z',
-    },
-    {
-      _id: '3',
-      descripcion: 'Otro post más',
-      autor: 'Joaquin',
-      meGusta: [],
-      comentarios: [],
-      createdAt: '2025-06-12T09:00:00.000Z',
-    },
-    {
-      _id: '4',
-      descripcion: 'Primer post',
-      autor: 'Juan',
-      meGusta: ['123', '456'],
-      comentarios: [
-        { autor: 'Ana', texto: 'Muy bueno' },
-        { autor: 'Pedro', texto: 'Gracias por compartir' },
-      ],
-      createdAt: '2025-06-13T10:00:00.000Z',
-    },
-    {
-      _id: '5',
-      descripcion: 'Segundo post',
-      autor: 'Maria',
-      meGusta: ['456'],
-      comentarios: [],
-      createdAt: '2025-06-14T12:00:00.000Z',
-    },
-    {
-      _id: '6',
-      descripcion: 'Otro post más',
-      autor: 'Joaquin',
-      meGusta: [],
-      comentarios: [],
-      createdAt: '2025-06-12T09:00:00.000Z',
-    },
-    {
-      _id: '7',
-      descripcion: 'Primer post',
-      autor: 'Juan',
-      meGusta: ['123', '456'],
-      comentarios: [
-        { autor: 'Ana', texto: 'Muy bueno' },
-        { autor: 'Pedro', texto: 'Gracias por compartir' },
-      ],
-      createdAt: '2025-06-13T10:00:00.000Z',
-    },
-    {
-      _id: '8',
-      descripcion: 'Segundo post',
-      autor: 'Maria',
-      meGusta: ['456'],
-      comentarios: [],
-      createdAt: '2025-06-14T12:00:00.000Z',
-    },
-    {
-      _id: '9',
-      descripcion: 'Otro post más',
-      autor: 'Joaquin',
-      meGusta: [],
-      comentarios: [],
-      createdAt: '2025-06-12T09:00:00.000Z',
-    },
-    // ... agregá más si querés probar la paginación
-  ];
+
 
   ngOnInit(): void {
     if (this.authService.isLoggedIn()) {
@@ -135,23 +52,6 @@ export class PostsComponent implements OnInit {
 
   cargarPublicaciones(): void {
     if (this.modoMock) {
-      let publicacionesOrdenadas = [...this.todasLasPublicaciones];
-
-      if (this.ordenSeleccionado === 'fecha') {
-        publicacionesOrdenadas.sort(
-          (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-      } else if (this.ordenSeleccionado === 'likes') {
-        publicacionesOrdenadas.sort(
-          (a, b) => b.meGusta.length - a.meGusta.length
-        );
-      }
-
-      const inicio = (this.paginaActual - 1) * this.limite;
-      const fin = inicio + this.limite;
-      this.publicaciones = publicacionesOrdenadas.slice(inicio, fin);
-      this.hayMasPaginas = publicacionesOrdenadas.length > fin;
     } else {
       this.postService
         .getPublicaciones(

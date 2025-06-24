@@ -1,0 +1,60 @@
+<div *ngIf="post" class="post-card">
+  <h2>{{ post.titulo }}</h2>
+  <p>{{ post.descripcion }}</p>
+  <img *ngIf="post.imagenUrl; else noImagen" [src]="getImageUrl(post.imagenUrl)" alt="Imagen del post" />
+  <ng-template #noImagen>
+    <div class="imagen-placeholder">
+      <i class="bi bi-image"></i> <!-- Icono de Bootstrap Icons (opcional) -->
+      <p>No hay imagen disponible</p>
+    </div>
+  </ng-template>
+
+  <h3>Comentarios</h3>
+  
+  <!-- Formulario para nuevo comentario -->
+  <div class="nuevo-comentario">
+    <textarea 
+      [(ngModel)]="nuevoComentario" 
+      placeholder="Escribe tu comentario..."
+    ></textarea>
+    <button (click)="agregarComentario()">Publicar</button>
+  </div>
+
+  <!-- Lista de comentarios -->
+  <div *ngFor="let c of comentarios" class="comentario">
+    <div class="comentario-header">
+      <strong>{{ c.autor.nombreUsuario }}:</strong>
+      <span *ngIf="c.modificado" class="modificado">(modificado)</span>
+    </div>
+    
+    <div *ngIf="!c.editando" class="comentario-texto">
+      {{ c.texto }}
+    </div>
+    
+    <div *ngIf="c.editando" class="editar-comentario">
+      <textarea [(ngModel)]="c.editText"></textarea>
+      <div class="editar-acciones">
+        <button (click)="guardarEdicion(c)">Guardar</button>
+        <button (click)="c.editando = false">Cancelar</button>
+      </div>
+    </div>
+    
+    <div class="comentario-acciones">
+      <button 
+        *ngIf="usuarioActual && usuarioActual._id === c.autor._id" 
+        (click)="iniciarEdicion(c)"
+        class="btn-editar"
+      >
+        Editar
+      </button>
+    </div>
+  </div>
+
+  <button 
+    (click)="cargarComentarios()" 
+    [disabled]="!hayMasComentarios"
+    class="btn-cargar-mas"
+  >
+    {{ hayMasComentarios ? 'Cargar más' : 'No hay más comentarios' }}
+  </button>
+</div>

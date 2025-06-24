@@ -1,6 +1,15 @@
 export interface Comentario {
-  autor: string; // id o nombre del usuario, según cómo lo uses
+  _id: string;
   texto: string;
+  autor: {
+    _id: string;
+    nombreUsuario: string;
+    imagenPerfilUrl?: string;
+  };
+  postId: string;
+  modificado: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Post {

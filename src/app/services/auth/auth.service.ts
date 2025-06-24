@@ -1,15 +1,16 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { isPlatformBrowser } from '@angular/common';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private apiUrl = 'http://localhost:3000';
-  private modoMock = true;
+  private modoMock = false;
 
   constructor(
     private http: HttpClient,
@@ -60,10 +61,10 @@ export class AuthService {
         .then((res) => {
           if (this.isBrowser()) {
             localStorage.setItem('token', res.access_token);
-            localStorage.setItem('usuario', JSON.stringify(res.data));
+            localStorage.setItem('usuario', JSON.stringify(res.user));
           }
           this.token = res.access_token;
-          this.usuario = res.data;
+          this.usuario = res.user;
           console.log('Login exitoso. Token:', res.access_token);
           return res;
         });
@@ -110,5 +111,26 @@ export class AuthService {
       return Promise.resolve();
     }
     return new Promise((resolve) => setTimeout(resolve, 100));
+  }
+
+  getCurrentUser(): Observable<any> {
+    // Usa la URL completa del backend
+    return this.http
+      .get(`${this.apiUrl}/auth/current-user`, {
+        headers: this.getAuthHeaders(),
+      })
+      .pipe(
+        catchError((error) => {
+          console.error('Error obteniendo usuario actual:', error);
+          return throwError(error);
+        })
+      );
+  }
+
+  getAuthHeaders(): HttpHeaders {
+    const token = this.getToken();
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
   }
 }

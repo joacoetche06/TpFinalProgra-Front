@@ -15,7 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./myprofile.component.css'],
 })
 export class MyProfileComponent implements OnInit {
-  modoMock = true;
+  modoMock = false;
   usuario: Usuario | null = null;
   publicaciones: Post[] = [];
   showDefaultIcon = false;
@@ -45,7 +45,6 @@ export class MyProfileComponent implements OnInit {
       imagenPerfilUrl: '/favicon2.png',
     };
 
-    this.publicaciones = this.getMockPosts();
   }
 
   private loadRealData(): void {
@@ -70,53 +69,6 @@ export class MyProfileComponent implements OnInit {
     }
   }
 
-  private getMockPosts(): Post[] {
-    return [
-      {
-        _id: '1',
-        descripcion: 'Mi primer post',
-        autor: 'Joaquín',
-        meGusta: ['123'],
-        comentarios: [
-          { autor: 'Ana', texto: 'Genial!' },
-          { autor: 'Pia', texto: 'Que bueno!' },
-        ],
-        createdAt: '2025-06-13T10:00:00Z',
-      },
-      {
-        _id: '2',
-        descripcion: 'Otro más',
-        autor: 'Joaquín',
-        meGusta: [],
-        comentarios: [],
-        createdAt: '2025-06-12T09:00:00Z',
-      },
-      {
-        _id: '3',
-        descripcion: 'Último post',
-        autor: 'Joaquín',
-        meGusta: [],
-        comentarios: [
-          { autor: 'Ana', texto: 'Genial!' },
-          { autor: 'Pia', texto: 'Que bueno!' },
-        ],
-        createdAt: '2025-06-11T08:00:00Z',
-      },
-      {
-        _id: '4',
-        descripcion: 'Este no se ve',
-        autor: 'Joaquín',
-        meGusta: [],
-        comentarios: [],
-        createdAt: '2025-06-10T07:00:00Z',
-      },
-    ]
-      .sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      )
-      .slice(0, 3);
-  }
 
   getImageUrl(imagePath: string | undefined): string {
     if (!imagePath) {
