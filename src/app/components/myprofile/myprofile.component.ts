@@ -15,7 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./myprofile.component.css'],
 })
 export class MyProfileComponent implements OnInit {
-  modoMock = true;
+  modoMock = false;
   usuario: Usuario | null = null;
   publicaciones: Post[] = [];
   showDefaultIcon = false;

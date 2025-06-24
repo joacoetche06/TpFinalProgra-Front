@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class AuthService {
   private apiUrl = 'http://localhost:3000';
-  private modoMock = true;
+  private modoMock = false;
 
   constructor(
     private http: HttpClient,

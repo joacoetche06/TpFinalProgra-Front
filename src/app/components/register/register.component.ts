@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
+import { SnackbarService } from '../../services/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-register',
@@ -24,7 +25,11 @@ export class RegisterComponent {
   selectedFile: File | null = null;
   error: string | null = null;
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private snackbarService: SnackbarService
+  ) {}
 
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0] || null;
@@ -57,6 +62,10 @@ export class RegisterComponent {
     this.authService.register(formData).subscribe({
       next: (res) => {
         console.log('Usuario registrado:', res);
+        this.snackbarService.showMessage(
+          `Gracias por registrarte ${res.data.nombre}!`,
+          'success'
+        );
         this.router.navigate(['/login']);
       },
       error: (err) => {
