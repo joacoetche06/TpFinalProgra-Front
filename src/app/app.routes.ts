@@ -38,13 +38,20 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
-  path: 'posts/:id',
-  loadComponent: () =>
-    import('./components/post-content/post-content.component').then(
-      (m) => m.PostContentComponent,
-    ),
-  canActivate: [AuthGuard],
-},
+    path: 'posts/:id',
+    loadComponent: () =>
+      import('./components/post-content/post-content.component').then(
+        (m) => m.PostContentComponent
+      ),
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'loading',
+    loadComponent: () =>
+      import('./components/loading/loading.component').then(
+        (m) => m.LoadingComponent
+      ),
+  },
   {
     path: '**',
     redirectTo: 'login',

@@ -22,10 +22,12 @@ export class PostService {
     const params = new HttpParams()
       .set('sort', sortBy)
       .set('offset', offset.toString())
-      .set('limit', limit.toString());
+      .set('limit', limit.toString())
+      .set('includeComments', 'true'); // Nuevo parámetro
 
     return this.http.get<{ posts: Post[]; total: number }>(this.apiUrl, {
       params,
+      headers: this.authService.getAuthHeaders(),
     });
   }
 
@@ -45,19 +47,22 @@ export class PostService {
     userId: string,
     cantidad: number
   ): Observable<{ posts: Post[]; total: number }> {
+    const params = new HttpParams()
+      .set('userId', userId)
+      .set('sort', 'fecha')
+      .set('offset', '0')
+      .set('limit', cantidad.toString())
+      .set('includeComments', 'true'); // <--- clave para incluir comentarios
+
     return this.http.get<{ posts: Post[]; total: number }>(`${this.apiUrl}`, {
-      params: {
-        userId,
-        sort: 'fecha',
-        offset: 0,
-        limit: cantidad.toString(),
-      },
+      params,
+      headers: this.authService.getAuthHeaders(),
     });
   }
 
   getPostById(id: string) {
     return this.http.get<Post>(`${this.apiUrl}/${id}`, {
-      headers: this.authService.getAuthHeaders() // Necesitarás inyectar AuthService o crear un método similar
+      headers: this.authService.getAuthHeaders(), // Necesitarás inyectar AuthService o crear un método similar
     });
   }
 }

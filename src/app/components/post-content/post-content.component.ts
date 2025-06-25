@@ -46,7 +46,7 @@ export class PostContentComponent implements OnInit {
       error: (err) => {
         console.error('Error obteniendo usuario actual:', err);
         this.router.navigate(['/login']);
-      }
+      },
     });
 
     // Cargar publicación
@@ -60,7 +60,7 @@ export class PostContentComponent implements OnInit {
         if (err.status === 401) {
           this.router.navigate(['/login']);
         }
-      }
+      },
     });
 
     this.cargarComentarios();
@@ -77,9 +77,9 @@ export class PostContentComponent implements OnInit {
           const nuevosComentarios = resp.comentarios.map((c: any) => ({
             ...c,
             editando: false,
-            editText: c.texto
+            editText: c.texto,
           }));
-          
+
           this.comentarios = [...this.comentarios, ...nuevosComentarios];
           this.offset += resp.comentarios.length;
           this.hayMasComentarios = this.offset < resp.total;
@@ -106,21 +106,29 @@ export class PostContentComponent implements OnInit {
   // Función para guardar los cambios de un comentario editado
   guardarEdicion(comentario: any) {
     const nuevoTexto = comentario.editText.trim();
-    console.log('Guardando edición para comentario:', comentario._id, 'Nuevo texto:', nuevoTexto);
+    console.log(
+      'Guardando edición para comentario:',
+      comentario._id,
+      'Nuevo texto:',
+      nuevoTexto
+    );
     if (nuevoTexto && nuevoTexto !== comentario.texto) {
-      this.comentarioService.modificarComentario(comentario._id, nuevoTexto)
+      this.comentarioService
+        .modificarComentario(comentario._id, nuevoTexto)
         .subscribe({
           next: (comentarioActualizado: Comentario) => {
             // Actualizar el comentario en la lista
             comentario.texto = comentarioActualizado.texto;
             comentario.modificado = comentarioActualizado.modificado;
             comentario.editando = false;
+            comentario.autor = comentarioActualizado.autor; // Actualizar el autor si es necesario
+            console.log('Comentario actualizado:', comentario);
           },
           error: (err) => {
             console.error('Error al actualizar comentario:', err);
             // Revertir cambios en caso de error
             comentario.editText = comentario.texto;
-          }
+          },
         });
     } else {
       // Cancelar si no hay cambios
@@ -131,21 +139,24 @@ export class PostContentComponent implements OnInit {
   // Función para agregar un nuevo comentario
   agregarComentario() {
     if (this.nuevoComentario.trim()) {
-      this.comentarioService.agregarComentario(this.postId, this.nuevoComentario.trim())
+      this.comentarioService
+        .agregarComentario(this.postId, this.nuevoComentario.trim())
         .subscribe({
           next: (nuevoComent: any) => {
             // Agregar el nuevo comentario al principio de la lista
+            console.log('Nuevo comentario agregado:', nuevoComent);
             this.comentarios.unshift({
               ...nuevoComent,
               editando: false,
-              editText: nuevoComent.texto
+              editText: nuevoComent.texto,
             });
+            console.log('Comentarios actualizados:', this.comentarios);
             this.nuevoComentario = '';
           },
           error: (err) => {
             console.error('Error al agregar comentario:', err);
             if (err.status === 401) this.router.navigate(['/login']);
-          }
+          },
         });
     }
   }
@@ -160,4 +171,33 @@ export class PostContentComponent implements OnInit {
       : `${this.API_URL}${imagePath}`;
   }
 
+  tieneLike(): boolean {
+    return this.post?.meGusta?.includes(this.usuarioActual?._id);
+  }
+
+  toggleLike(): void {
+    if (!this.usuarioActual || !this.post) return;
+
+    const yaLeDioLike = this.tieneLike();
+
+    const observable = yaLeDioLike
+      ? this.postService.unlikePost(this.post._id)
+      : this.postService.likePost(this.post._id);
+
+    observable.subscribe({
+      next: () => {
+        if (yaLeDioLike) {
+          this.post.meGusta = this.post.meGusta.filter(
+            (id: string) => id !== this.usuarioActual._id
+          );
+        } else {
+          this.post.meGusta.push(this.usuarioActual._id);
+        }
+      },
+      error: (err) => {
+        console.error('Error al modificar like:', err);
+        if (err.status === 401) this.router.navigate(['/login']);
+      },
+    });
+  }
 }

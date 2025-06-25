@@ -25,20 +25,36 @@
   <div *ngIf="publicaciones.length > 0">
     <h3 style="color: #c62828">Mis últimas publicaciones</h3>
     <div *ngFor="let post of publicaciones" class="post-card">
-      <p><strong>Contenido:</strong> {{ post.descripcion }}</p>
-      <p><strong>Fecha:</strong> {{ post.createdAt | date : "short" }}</p>
-      <p><strong>Likes:</strong> {{ post.meGusta.length }}</p>
+      <div class="post-content">
+        <div class="post-left">
+          <p><strong>Contenido:</strong> {{ post.descripcion }}</p>
+          <p><strong>Fecha:</strong> {{ post.createdAt | date : "short" }}</p>
+          <p><strong>Likes:</strong> {{ post.meGusta.length }}</p>
+          <div class="ver-detalles">
+            <button (click)="verPost(post._id)">
+              Ver publicación completa
+            </button>
+          </div>
+        </div>
 
-      <div *ngIf="post.comentarios?.length">
-        <p><strong>Comentarios:</strong></p>
-        <ul>
-          <li
-            *ngFor="let comentario of post.comentarios"
-            style="list-style-type: none"
-          >
-            {{ comentario.autor }}: {{ comentario.texto }}
-          </li>
-        </ul>
+        <div class="post-right">
+          <img
+            *ngIf="post.imagenUrl; else sinImagen"
+            [src]="getImageUrl(post.imagenUrl)"
+            alt="Imagen del post"
+            class="post-image"
+          />
+          <ng-template #sinImagen>
+            <div class="imagen-placeholder">
+              <i class="bi bi-image"></i>
+              <p>Sin imagen</p>
+            </div>
+          </ng-template>
+
+          <p class="comentarios-contador">
+            <strong>Comentarios:</strong> {{ post.comentariosCount }}
+          </p>
+        </div>
       </div>
     </div>
   </div>

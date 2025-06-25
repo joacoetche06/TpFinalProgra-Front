@@ -9,10 +9,15 @@ import {
 import { Observable, catchError, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
+import { SessionService } from '../session/session.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private sessionService: SessionService
+  ) {}
 
   intercept(
     req: HttpRequest<any>,
@@ -27,6 +32,7 @@ export class AuthInterceptor implements HttpInterceptor {
       return next.handle(authReq).pipe(
         catchError((error: HttpErrorResponse) => {
           if (error.status === 401) {
+            this.sessionService.endSession();
             this.handleUnauthorized();
           }
           return throwError(() => error);

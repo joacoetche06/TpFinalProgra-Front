@@ -2,41 +2,68 @@
   <option value="fecha">Ordenar por fecha</option>
   <option value="likes">Ordenar por me gusta</option>
 </select>
+
 <div *ngIf="publicaciones.length > 0; else noPosts">
   <div *ngFor="let post of publicaciones" class="post-card">
-    <p><strong>Autor:</strong> {{ post.autor }}</p>
+    <div class="post-header">
+      <img
+        *ngIf="(post.autor | usuarioProp)?.imagenPerfilUrl"
+        [src]="getImageUrl((post.autor | usuarioProp)?.imagenPerfilUrl)"
+        class="post-user-img"
+        alt="Avatar"
+      />
+      <div>
+        <p>
+          <strong>{{ post.autor | usuarioProp : "nombreUsuario" }}</strong>
+        </p>
+        <p class="post-date">{{ post.createdAt | date : "medium" }}</p>
+      </div>
+    </div>
+
     <p><strong>Contenido:</strong> {{ post.descripcion }}</p>
-    <p><strong>Fecha:</strong> {{ post.createdAt | date : "short" }}</p>
 
-    <button (click)="toggleLike(post)">
-      <ng-container *ngIf="tieneLike(post); else likeIcon">
-        <i class="bi bi-hand-thumbs-up-fill"></i>
-      </ng-container>
-      <ng-template #likeIcon>
-        <i class="bi bi-hand-thumbs-up"></i>
-      </ng-template>
-      {{ post.meGusta.length }}
-    </button>
+    <div *ngIf="post.imagenUrl" class="post-image-container">
+      <img
+        [src]="getImageUrl(post.imagenUrl)"
+        alt="Imagen del post"
+        class="post-image"
+      />
+    </div>
 
-    <div *ngIf="post.comentarios?.length">
-      <p><strong>Comentarios:</strong></p>
-      <ul>
-        <li *ngFor="let comentario of post.comentarios">
-          {{ comentario.autor }}: {{ comentario.texto }}
-        </li>
-      </ul>
+    <div class="acciones-post">
+      <button (click)="toggleLike(post)" class="like-button">
+        <ng-container *ngIf="tieneLike(post); else likeIcon">
+          <i class="bi bi-hand-thumbs-up-fill"></i>
+        </ng-container>
+        <ng-template #likeIcon>
+          <i class="bi bi-hand-thumbs-up"></i>
+        </ng-template>
+        {{ post.meGusta.length }}
+      </button>
+
+      <p class="comentarios-contador">
+        <i class="bi bi-chat-dots"></i> {{ post.comentariosCount }}
+      </p>
+    </div>
+
+    <div class="detalles-section">
+      <div class="ver-detalles">
+        <button (click)="verPost(post._id)">Ver publicación completa</button>
+      </div>
     </div>
   </div>
 </div>
+
 <div class="paginacion">
-  <p>Pagina {{ paginaActual }}</p>
   <button (click)="anteriorPagina()" [disabled]="paginaActual === 1">
     Anterior
   </button>
+  <span>Página {{ paginaActual }}</span>
   <button (click)="siguientePagina()" [disabled]="!hayMasPaginas">
     Siguiente
   </button>
 </div>
+
 <ng-template #noPosts>
-  <p class="post-card">No hay publicaciones disponibles.</p>
+  <p class="no-posts-message">No hay publicaciones disponibles.</p>
 </ng-template>

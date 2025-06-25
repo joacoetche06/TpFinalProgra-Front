@@ -14,12 +14,15 @@ export interface Comentario {
 
 export interface Post {
   _id: string;
+  titulo?: string;
   descripcion: string;
-  autor: Usuario | string;
-  meGusta: string[]; // array de ids de usuarios que dieron like
-  comentarios: Comentario[];
-  createdAt: string; // ISO date string
-  updatedAt?: string; // opcional
+  imagenUrl?: string;
+  autor: string | Usuario;
+  meGusta: string[];
+  comentarios?: Comentario[];
+  comentariosCount?: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Usuario {

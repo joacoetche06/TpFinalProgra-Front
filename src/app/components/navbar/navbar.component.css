@@ -1,0 +1,114 @@
+.navbar {
+  display: flex;
+  justify-content: center;
+  gap: 4%;
+  padding: 0% 5%;
+  background: var(--primary);
+  backdrop-filter: blur(10px);
+  border-bottom: 0.5% solid var(--primary-color);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 0.5% 2% rgba(0, 255, 157, 0.2);
+  border-bottom: 2px solid var(--accent);
+}
+
+.navbar a {
+  color: black;
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 1% 3%;
+  border-radius: 0.3rem;
+  transition: all 0.3s ease;
+  position: relative;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.navbar a::before {
+  content: "";
+  position: absolute;
+  bottom: -1%;
+  left: 0;
+  width: 100%;
+  height: 0.3%;
+  background: #000;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.navbar a:hover {
+  color: rgb(182, 84, 84);
+  text-shadow: 0 0 0.5% darkslategray;
+}
+
+.navbar a:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.navbar a.active {
+  color: chartreuse;
+  background: rgba(0, 255, 157, 0.1);
+}
+
+.navbar a.active::before {
+  transform: scaleX(1);
+  background: #00ff99;
+}
+
+.navbar button {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  margin-left: 1rem;
+}
+
+.navbar button:hover {
+  text-decoration: underline;
+}
+
+.navbar-usuario {
+  color: black;
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 1% 3%;
+  border-radius: 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  pointer-events: none;
+}
+
+.navbar-usuario:hover,
+.navbar-usuario.active,
+.navbar-usuario::before,
+.navbar-usuario:hover::before {
+  color: inherit;
+  background: none;
+  text-shadow: none;
+  transform: none;
+  text-decoration: none;
+}
+
+@media (max-width: 600px) {
+  .navbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5%;
+    padding: 2% 2%;
+  }
+  .navbar a,
+  span {
+    width: 100%;
+    text-align: center;
+    padding: 3% 0;
+    font-size: 0.9rem;
+  }
+  .navbar-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}

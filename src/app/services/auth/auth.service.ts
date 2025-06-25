@@ -3,14 +3,16 @@ import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { isPlatformBrowser } from '@angular/common';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
+import { Usuario } from '../../lib/interfaces';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000';
-  private modoMock = false;
+  private readonly apiUrl = 'http://localhost:3000';
+  private readonly modoMock = false;
+  private usuario: Usuario | null = null;
 
   constructor(
     private http: HttpClient,
@@ -19,20 +21,22 @@ export class AuthService {
     this.initializeAuthState();
   }
 
-  private initializeAuthState() {
-    if (this.isBrowser()) {
-      this.token = localStorage.getItem('token');
-      const userData = localStorage.getItem('usuario');
-      this.usuario = userData ? JSON.parse(userData) : null;
-    }
-  }
-
   private isBrowser(): boolean {
     return isPlatformBrowser(this.platformId);
   }
 
-  private token: string | null = null;
-  private usuario: any = null;
+  private initializeAuthState() {
+    if (this.isBrowser()) {
+      const token = localStorage.getItem('token');
+      const userData = localStorage.getItem('usuario');
+      this.usuario = userData ? JSON.parse(userData) : null;
+
+      // Si el token ya expiró, lo limpiamos
+      if (token && this.isTokenExpired(token)) {
+        this.logout();
+      }
+    }
+  }
 
   async login(usernameOrEmail: string, password: string) {
     if (this.modoMock) {
@@ -41,54 +45,35 @@ export class AuthService {
           usernameOrEmail === 'admin@correo.com') &&
         password === 'Admin123'
       ) {
-        const mockedUser = {
+        const mockedUser: Usuario = {
+          _id: '1',
+          nombre: 'Admin',
           nombreUsuario: 'admin',
-          rol: 'admin',
-          token: 'mocked-jwt',
+          email: 'admin@correo.com',
         };
+        const token = 'mocked-jwt';
         localStorage.setItem('usuario', JSON.stringify(mockedUser));
-        return Promise.resolve(mockedUser);
+        localStorage.setItem('token', token);
+        this.usuario = mockedUser;
+        return { user: mockedUser, access_token: token };
       } else {
         return Promise.reject('Usuario o contraseña incorrectos');
       }
     } else {
-      return this.http
+      const response = await this.http
         .post<any>(`${this.apiUrl}/auth/login`, {
           nombreUsuarioOEmail: usernameOrEmail,
           password,
         })
-        .toPromise()
-        .then((res) => {
-          if (this.isBrowser()) {
-            localStorage.setItem('token', res.access_token);
-            localStorage.setItem('usuario', JSON.stringify(res.user));
-          }
-          this.token = res.access_token;
-          this.usuario = res.user;
-          console.log('Login exitoso. Token:', res.access_token);
-          return res;
-        });
+        .toPromise();
+
+      if (this.isBrowser()) {
+        localStorage.setItem('token', response.access_token);
+        localStorage.setItem('usuario', JSON.stringify(response.user));
+      }
+      this.usuario = response.user;
+      return response;
     }
-  }
-
-  register(userData: FormData): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/register`, userData);
-  }
-
-  getToken(): string | null {
-    return this.token;
-  }
-
-  getUsuario(): any {
-    return this.usuario;
-  }
-
-  getUserId(): string | null {
-    return this.usuario?._id || null;
-  }
-
-  isLoggedIn(): boolean {
-    return !!this.token && !this.isTokenExpired(this.token);
   }
 
   logout() {
@@ -96,25 +81,45 @@ export class AuthService {
       localStorage.removeItem('usuario');
       localStorage.removeItem('token');
     }
-    this.token = null;
     this.usuario = null;
   }
 
-  isTokenExpired(token: string): boolean {
+  getToken(): string | null {
+    return this.isBrowser() ? localStorage.getItem('token') : null;
+  }
+
+  register(userData: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/register`, userData);
+  }
+
+  isTokenExpired(token: string | null = this.getToken()): boolean {
+    if (!token) return true;
     const decoded: any = jwtDecode(token);
     const now = Math.floor(Date.now() / 1000);
     return decoded.exp < now;
   }
 
-  async waitForAuthInit(): Promise<void> {
-    if (this.isBrowser() && localStorage.getItem('token')) {
-      return Promise.resolve();
+  isLoggedIn(): boolean {
+    const token = this.getToken();
+    return !!token && !this.isTokenExpired(token);
+  }
+
+  getUsuario(): Usuario | null {
+    return this.usuario;
+  }
+
+  getUserId(): string | null {
+    return this.usuario?._id || null;
+  }
+
+  setUsuario(usuario: Usuario): void {
+    this.usuario = usuario;
+    if (this.isBrowser()) {
+      localStorage.setItem('usuario', JSON.stringify(usuario));
     }
-    return new Promise((resolve) => setTimeout(resolve, 100));
   }
 
   getCurrentUser(): Observable<any> {
-    // Usa la URL completa del backend
     return this.http
       .get(`${this.apiUrl}/auth/current-user`, {
         headers: this.getAuthHeaders(),
@@ -132,5 +137,38 @@ export class AuthService {
     return new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
+  }
+
+  refreshToken(): Observable<{ access_token: string }> {
+    // Si estás en modo mock
+    // if (this.modoMock) {
+    //   const token = 'mocked-refreshed-jwt';
+    //   localStorage.setItem('token', token);
+    //   return of({ access_token: token });
+    // }
+
+    const token = this.getToken();
+    if (!token) {
+      return throwError(() => new Error('No hay token para refrescar'));
+    }
+
+    return this.http
+      .post<{ access_token: string }>(
+        `${this.apiUrl}/auth/refresh-token`,
+        {},
+        { headers: this.getAuthHeaders() }
+      )
+      .pipe(
+        tap((response) => {
+          if (response.access_token && this.isBrowser()) {
+            localStorage.setItem('token', response.access_token);
+          }
+        }),
+        catchError((error) => {
+          console.error('Error al refrescar el token:', error);
+          this.logout();
+          return throwError(() => error);
+        })
+      );
   }
 }

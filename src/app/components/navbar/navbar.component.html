@@ -1,0 +1,19 @@
+<nav class="navbar">
+  <div class="navbar-brand">MiRedSocial</div>
+
+  <!-- VISTAS SIN LOGUEO -->
+  <a routerLink="/register" routerLinkActive="active" *ngIf="!isLoggedIn()"
+    >Registro</a
+  >
+  <a routerLink="/login" routerLinkActive="active" *ngIf="!isLoggedIn()"
+    >Login</a
+  >
+
+  <!-- VISTAS CON LOGUEO -->
+  <ng-container *ngIf="isLoggedIn()">
+    <a routerLink="/posts" routerLinkActive="active">Inicio</a>
+    <a routerLink="/myprofile" routerLinkActive="active">Mi Perfil</a>
+    <span class="navbar-usuario">{{ usuario }}</span>
+    <a href="#" (click)="logout(); $event.preventDefault()">Cerrar sesión</a>
+  </ng-container>
+</nav>

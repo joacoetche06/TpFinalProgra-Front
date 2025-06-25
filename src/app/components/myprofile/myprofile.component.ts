@@ -44,7 +44,6 @@ export class MyProfileComponent implements OnInit {
       email: 'joaco@correo.com',
       imagenPerfilUrl: '/favicon2.png',
     };
-
   }
 
   private loadRealData(): void {
@@ -69,7 +68,6 @@ export class MyProfileComponent implements OnInit {
     }
   }
 
-
   getImageUrl(imagePath: string | undefined): string {
     if (!imagePath) {
       this.imageError = true;
@@ -82,5 +80,9 @@ export class MyProfileComponent implements OnInit {
 
   handleImageError(): void {
     this.showDefaultIcon = true;
+  }
+
+  verPost(postId: string): void {
+    this.router.navigate(['/posts', postId]);
   }
 }

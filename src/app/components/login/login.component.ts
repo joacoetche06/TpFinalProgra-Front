@@ -34,7 +34,7 @@ export class LoginComponent {
 
     this.authService
       .login(this.usernameOrEmail, this.password)
-      .then(() => this.router.navigate(['/posts']))
+      .then(() => this.router.navigate(['/loading']))
       .catch((err) => {
         console.log(err);
         this.error = typeof err === 'string' ? err : 'Error al iniciar sesión';

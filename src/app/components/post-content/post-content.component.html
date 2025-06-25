@@ -1,36 +1,77 @@
 <div *ngIf="post" class="post-card">
-  <h2>{{ post.titulo }}</h2>
-  <p>{{ post.descripcion }}</p>
-  <img *ngIf="post.imagenUrl; else noImagen" [src]="getImageUrl(post.imagenUrl)" alt="Imagen del post" />
-  <ng-template #noImagen>
-    <div class="imagen-placeholder">
-      <i class="bi bi-image"></i> <!-- Icono de Bootstrap Icons (opcional) -->
-      <p>No hay imagen disponible</p>
-    </div>
-  </ng-template>
+  <div class="autor-info">
+    <img
+      *ngIf="post.autor?.imagenPerfilUrl; else sinFoto"
+      [src]="getImageUrl(post.autor.imagenPerfilUrl)"
+      alt="Avatar"
+      class="avatar-autor"
+    />
+    <ng-template #sinFoto>
+      <i class="bi bi-person-circle avatar-icon"></i>
+    </ng-template>
 
+    <span class="nombre-autor">{{ post.autor?.nombreUsuario }}</span>
+  </div>
+
+  <p class="post-date">{{ post.createdAt | date : "medium" }}</p>
+
+  <div class="contenido">
+    <h2>{{ post.titulo }}</h2>
+    <p>{{ post.descripcion }}</p>
+
+    <img
+      *ngIf="post.imagenUrl; else noImagen"
+      [src]="getImageUrl(post.imagenUrl)"
+      alt="Imagen del post"
+    />
+
+    <ng-template #noImagen>
+      <div class="imagen-placeholder">
+        <i class="bi bi-image"></i>
+        <p>No hay imagen disponible</p>
+      </div>
+    </ng-template>
+
+    <div class="like-section">
+      <button (click)="toggleLike()" class="like-button">
+        <ng-container *ngIf="tieneLike(); else likeIcon">
+          <i class="bi bi-hand-thumbs-up-fill"></i>
+        </ng-container>
+        <ng-template #likeIcon>
+          <i class="bi bi-hand-thumbs-up"></i>
+        </ng-template>
+        {{ post.meGusta.length }}
+      </button>
+    </div>
+  </div>
   <h3>Comentarios</h3>
-  
-  <!-- Formulario para nuevo comentario -->
+
+  <!-- Comentario nuevo -->
   <div class="nuevo-comentario">
-    <textarea 
-      [(ngModel)]="nuevoComentario" 
+    <textarea
+      [(ngModel)]="nuevoComentario"
       placeholder="Escribe tu comentario..."
     ></textarea>
     <button (click)="agregarComentario()">Publicar</button>
   </div>
 
-  <!-- Lista de comentarios -->
+  <!-- Lista -->
   <div *ngFor="let c of comentarios" class="comentario">
     <div class="comentario-header">
+      <img
+        *ngIf="c.autor?.imagenPerfilUrl"
+        [src]="getImageUrl(c.autor.imagenPerfilUrl)"
+        class="avatar-comentario"
+        alt="Avatar"
+      />
       <strong>{{ c.autor.nombreUsuario }}:</strong>
       <span *ngIf="c.modificado" class="modificado">(modificado)</span>
     </div>
-    
+
     <div *ngIf="!c.editando" class="comentario-texto">
       {{ c.texto }}
     </div>
-    
+
     <div *ngIf="c.editando" class="editar-comentario">
       <textarea [(ngModel)]="c.editText"></textarea>
       <div class="editar-acciones">
@@ -38,10 +79,10 @@
         <button (click)="c.editando = false">Cancelar</button>
       </div>
     </div>
-    
+
     <div class="comentario-acciones">
-      <button 
-        *ngIf="usuarioActual && usuarioActual._id === c.autor._id" 
+      <button
+        *ngIf="usuarioActual && usuarioActual._id === c.autor._id"
         (click)="iniciarEdicion(c)"
         class="btn-editar"
       >
@@ -50,11 +91,11 @@
     </div>
   </div>
 
-  <button 
-    (click)="cargarComentarios()" 
+  <button
+    (click)="cargarComentarios()"
     [disabled]="!hayMasComentarios"
     class="btn-cargar-mas"
   >
-    {{ hayMasComentarios ? 'Cargar más' : 'No hay más comentarios' }}
+    {{ hayMasComentarios ? "Cargar más" : "No hay más comentarios" }}
   </button>
 </div>

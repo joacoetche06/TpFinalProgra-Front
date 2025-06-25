@@ -8,11 +8,12 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth/auth.service';
 import { Usuario } from '../../lib/interfaces';
 import { Router } from '@angular/router';
+import { UsuarioPipe } from '../../pipes/usuario.pipe';
 
 @Component({
   selector: 'app-posts',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, UsuarioPipe],
   templateUrl: './posts.component.html',
   styleUrls: ['./posts.component.css'],
 })
@@ -25,14 +26,14 @@ export class PostsComponent implements OnInit {
   hayMasPaginas: boolean = true;
   totalPublicaciones: number = 0;
   modoMock: boolean = false;
+  imageError = false;
+  readonly API_URL = 'http://localhost:3000';
 
   constructor(
     private router: Router,
     private postService: PostService,
     private authService: AuthService
   ) {}
-
-
 
   ngOnInit(): void {
     if (this.authService.isLoggedIn()) {
@@ -62,8 +63,9 @@ export class PostsComponent implements OnInit {
         .subscribe((data: { posts: Post[]; total: number }) => {
           this.publicaciones = data.posts.map((post) => ({
             ...post,
-            autor: this.getNombreAutor(post.autor),
+            autor: post.autor,
           }));
+          console.log('Publicaciones cargadas:', this.publicaciones);
           this.totalPublicaciones = data.total;
           this.hayMasPaginas = data.posts.length === this.limite;
         });
@@ -117,5 +119,19 @@ export class PostsComponent implements OnInit {
         }
       });
     }
+  }
+
+  verPost(postId: string): void {
+    this.router.navigate(['/posts', postId]);
+  }
+
+  getImageUrl(imagePath: string | undefined): string {
+    if (!imagePath) {
+      this.imageError = true;
+      return '';
+    }
+    return imagePath.startsWith('http')
+      ? imagePath
+      : `${this.API_URL}${imagePath}`;
   }
 }

@@ -27,8 +27,8 @@ h2 {
 }
 
 .post-user-img {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   object-fit: cover;
   border-radius: 50%;
   border: 2px solid #c62828;
@@ -68,6 +68,7 @@ select {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   padding: 20px;
   margin-bottom: 24px;
+  padding-right: 0;
 }
 
 .post-card p {
@@ -77,7 +78,6 @@ select {
 
 /* Botón Me gusta / Quitar me gusta */
 .post-card button {
-  margin-top: 10px;
   padding: 8px 14px;
   border: none;
   border-radius: 8px;
@@ -87,6 +87,9 @@ select {
   cursor: pointer;
   transition: background-color 0.3s;
 }
+
+/* .acciones-post .comentarios-contador {
+} */
 
 .post-card button:hover {
   background-color: #b71c1c;
@@ -131,4 +134,135 @@ select {
 .paginacion button[disabled] {
   opacity: 0.4;
   cursor: default;
+}
+
+/* Estilos existentes... */
+
+.detalles-section {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.load-comments-button {
+  background: none;
+  border: none;
+  color: #c62828;
+  cursor: pointer;
+  padding: 5px 0;
+  font-size: 0.9em;
+}
+
+.load-comments-button:hover {
+  text-decoration: underline;
+}
+
+.comments-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.comment-item {
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.comment-user-img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.comment-author {
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+.comment-date {
+  font-size: 0.8em;
+  color: #666;
+  margin-left: auto;
+}
+
+.comment-text {
+  margin: 0;
+  padding-left: 40px;
+  font-size: 0.9em;
+}
+
+.comment-modified {
+  font-size: 0.8em;
+  color: #666;
+  font-style: italic;
+  padding-left: 40px;
+  display: block;
+}
+
+.post-image-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.post-image {
+  width: 100px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.acciones-post {
+  display: flex;
+  gap: 45%;
+  margin-top: 10px;
+}
+
+.like-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #c62828;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.like-button:hover {
+  background-color: #b71c1c;
+}
+
+.comentarios-contador {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #444;
+}
+
+.ver-detalles {
+  margin-left: 10px;
+}
+
+@media screen and (max-width: 299px) {
+  .post-card {
+    padding: 10px;
+    /* font-size: smaller; */
+  }
+  .acciones-post {
+    gap: 25%;
+  }
 }
