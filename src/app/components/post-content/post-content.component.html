@@ -1,3 +1,7 @@
+<div class="volver-container">
+  <button class="btn-volver" (click)="volverAtras()">← Volver</button>
+</div>
+
 <div *ngIf="post" class="post-card">
   <div class="autor-info">
     <img
@@ -59,11 +63,14 @@
   <div *ngFor="let c of comentarios" class="comentario">
     <div class="comentario-header">
       <img
-        *ngIf="c.autor?.imagenPerfilUrl"
+        *ngIf="c.autor?.imagenPerfilUrl != null; else sinFoto"
         [src]="getImageUrl(c.autor.imagenPerfilUrl)"
         class="avatar-comentario"
         alt="Avatar"
       />
+      <ng-template #sinFoto>
+        <i class="bi bi-person-circle avatar-icon"></i>
+      </ng-template>
       <strong>{{ c.autor.nombreUsuario }}:</strong>
       <span *ngIf="c.modificado" class="modificado">(modificado)</span>
     </div>
@@ -89,6 +96,9 @@
         Editar
       </button>
     </div>
+    <p class="post-date" style="margin: 10px 0 0 2px">
+      {{ c.createdAt | date : "medium" }}
+    </p>
   </div>
 
   <button

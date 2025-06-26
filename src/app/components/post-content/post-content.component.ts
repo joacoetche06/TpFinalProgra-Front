@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PostService } from '../../services/post/post.service';
 import { ComentarioService } from '../../services/post/comentario.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { Post, Comentario } from '../../lib/interfaces'; // Asegúrate de tener la interfaz Comentario
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service'; // Necesitarás el servicio de autenticación
@@ -32,7 +32,8 @@ export class PostContentComponent implements OnInit {
     private postService: PostService,
     private comentarioService: ComentarioService,
     private router: Router,
-    private authService: AuthService // Inyecta el servicio de autenticación
+    private authService: AuthService,
+    private location: Location
   ) {
     this.postId = this.route.snapshot.paramMap.get('id')!;
   }
@@ -199,5 +200,9 @@ export class PostContentComponent implements OnInit {
         if (err.status === 401) this.router.navigate(['/login']);
       },
     });
+  }
+
+  volverAtras() {
+    this.location.back();
   }
 }

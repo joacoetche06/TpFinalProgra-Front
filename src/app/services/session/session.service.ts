@@ -3,7 +3,7 @@ import { BehaviorSubject, timer, Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmSessionComponent } from '../../components/modal/confirm-session/confirm-session.component';
 import { AuthService } from '../auth/auth.service';
-
+import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root',
 })
@@ -14,14 +14,18 @@ export class SessionService {
   // Observable para que los componentes sepan si la sesión está activa
   sessionActive$ = new BehaviorSubject<boolean>(true);
 
-  constructor(private authService: AuthService, private dialog: MatDialog) {}
+  constructor(
+    private authService: AuthService,
+    private dialog: MatDialog,
+    private router: Router
+  ) {}
 
   startSessionTimer() {
     // Cancelar cualquier timer activo
     this.clearTimers();
 
-    // Iniciar timer de 1 minuto (60000 ms)
-    this.sessionTimeoutSubscription = timer(60000).subscribe(() => {
+    // Iniciar timer de 10 minutos (600000 ms)
+    this.sessionTimeoutSubscription = timer(600000).subscribe(() => {
       this.promptSessionExtension();
     });
   }
@@ -36,10 +40,13 @@ export class SessionService {
 
     // Esperar respuesta del usuario
     dialogRef.afterClosed().subscribe((result) => {
+      console.log('Dialog result:', result);
       if (result === true) {
         this.refreshSession();
       } else {
-        this.endSession();
+        this.countdownSubscription = timer(300000).subscribe(() => {
+          this.endSession();
+        });
       }
     });
   }
@@ -58,7 +65,21 @@ export class SessionService {
 
   endSession() {
     this.sessionActive$.next(false);
-    this.authService.logout();
+    this.dialog
+      .open(ConfirmSessionComponent, {
+        width: '350px',
+        disableClose: true,
+        data: {
+          message:
+            'Tu sesión ha expirado. Por favor, inicia sesión nuevamente.',
+          expired: true, // podés usar esto para cambiar botones del modal
+        },
+      })
+      .afterClosed()
+      .subscribe(() => {
+        this.authService.logout(); // ahora sí, limpiar token
+        this.router.navigate(['/login']);
+      });
     // Podés agregar navegación al login aquí si querés
   }
 
