@@ -6,6 +6,7 @@ import { PostService } from '../../services/post/post.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-myprofile',
@@ -15,11 +16,11 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./myprofile.component.css'],
 })
 export class MyProfileComponent implements OnInit {
-  modoMock = false;
+  private modoMock = environment.modoMock;
+  private apiUrl = environment.apiUrl;
   usuario: Usuario | null = null;
   publicaciones: Post[] = [];
   showDefaultIcon = false;
-  readonly API_URL = 'http://localhost:3000';
   imageError = false;
   constructor(
     private userService: UserService,
@@ -75,7 +76,7 @@ export class MyProfileComponent implements OnInit {
     }
     return imagePath.startsWith('http')
       ? imagePath
-      : `${this.API_URL}${imagePath}`;
+      : `${this.apiUrl}${imagePath}`;
   }
 
   handleImageError(): void {

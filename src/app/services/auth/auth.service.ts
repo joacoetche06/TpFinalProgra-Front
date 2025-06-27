@@ -5,15 +5,15 @@ import { isPlatformBrowser } from '@angular/common';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Usuario } from '../../lib/interfaces';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly apiUrl = 'http://localhost:3000';
-  private readonly modoMock = false;
   private usuario: Usuario | null = null;
-
+  private modoMock = environment.modoMock;
+  private apiUrl = environment.apiUrl;
   constructor(
     private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: Object

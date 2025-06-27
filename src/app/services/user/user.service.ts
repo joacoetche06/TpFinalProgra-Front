@@ -3,14 +3,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Usuario } from '../../lib/interfaces';
 import { Observable, of } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 // src/app/services/user.service.ts
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private modoMock = false;
-  private apiUrl = 'http://localhost:3000/usuarios/my-profile';
+  private modoMock = environment.modoMock;
+  private apiUrl = `${environment.apiUrl}/usuarios/my-profile`;
 
   constructor(private http: HttpClient) {}
 

@@ -9,6 +9,7 @@ import { AuthService } from '../../services/auth/auth.service';
 import { Usuario } from '../../lib/interfaces';
 import { Router } from '@angular/router';
 import { UsuarioPipe } from '../../pipes/usuario.pipe';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-posts',
@@ -25,10 +26,9 @@ export class PostsComponent implements OnInit {
   usuarioActualId: string = 'id_de_usuario';
   hayMasPaginas: boolean = true;
   totalPublicaciones: number = 0;
-  modoMock: boolean = false;
   imageError = false;
-  readonly API_URL = 'http://localhost:3000';
-
+  private modoMock = environment.modoMock;
+  private API_URL = environment.apiUrl;
   constructor(
     private router: Router,
     private postService: PostService,
