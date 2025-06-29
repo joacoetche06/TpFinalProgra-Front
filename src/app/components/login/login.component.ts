@@ -37,7 +37,10 @@ export class LoginComponent {
       .then(() => this.router.navigate(['/loading']))
       .catch((err) => {
         console.log(err);
-        this.error = typeof err === 'string' ? err : 'Error al iniciar sesión';
+        this.error =
+          typeof err.error.message === 'string'
+            ? err.error.message
+            : 'Error al iniciar sesión';
       });
   }
 }

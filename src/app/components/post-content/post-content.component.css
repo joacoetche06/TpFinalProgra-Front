@@ -164,19 +164,25 @@ h3 {
   color: #c62828;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
+  transition: all 0.3s;
 }
 
-.btn-cargar-mas:hover([disabled]) {
+/* Efecto hover solo cuando está habilitado */
+.btn-cargar-mas:not([disabled]):hover {
   background: #c62828;
   color: #fff;
 }
 
+/* Cuando no hay más comentarios (disabled) => parecer texto plano */
 .btn-cargar-mas[disabled] {
-  opacity: 0.9;
+  border: none;
+  background: none;
+  color: #666;
   cursor: default;
-  /* border-color: #999;
-  color: #999; */
+  padding: 0;
+  font-weight: normal;
+  font-size: 14px;
+  text-align: center;
 }
 
 .post-card {

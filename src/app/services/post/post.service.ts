@@ -4,12 +4,12 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Post } from '../../lib/interfaces';
 import { AuthService } from '../auth/auth.service';
-
+import { environment } from '../../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class PostService {
-  private apiUrl = 'http://localhost:3000/posts';
+  private apiUrl = `${environment.apiUrl}/posts`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

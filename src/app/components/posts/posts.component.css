@@ -41,7 +41,7 @@ p {
 /* Contenedor general de la página */
 :host {
   display: block;
-  max-width: 800px;
+  width: 1000px;
   margin: 40px auto;
   padding: 0 16px;
 }
@@ -69,11 +69,16 @@ select {
   padding: 20px;
   margin-bottom: 24px;
   padding-right: 0;
+  width: 100%;
 }
 
 .post-card p {
   margin: 6px 0;
   color: #333;
+}
+
+.contenido {
+  text-align: center;
 }
 
 /* Botón Me gusta / Quitar me gusta */
@@ -216,15 +221,16 @@ select {
 }
 
 .post-image {
-  width: 100px;
+  width: 200px;
   border-radius: 12px;
   object-fit: cover;
 }
 
 .acciones-post {
   display: flex;
-  gap: 45%;
+  gap: 10%;
   margin-top: 10px;
+  justify-content: center;
 }
 
 .like-button {
@@ -238,7 +244,7 @@ select {
   padding: 8px 12px;
   font-weight: bold;
   cursor: pointer;
-  margin-left: 10px;
+  /* margin-left: 10px; */
 }
 
 .like-button:hover {
@@ -254,7 +260,9 @@ select {
 }
 
 .ver-detalles {
-  margin-left: 10px;
+  /* margin-left: 10px; */
+  display: flex;
+  justify-content: center;
 }
 
 @media screen and (max-width: 299px) {

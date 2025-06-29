@@ -5,7 +5,7 @@
   text-align: center;
   font-size: 0.9rem;
   box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.5);
-  border-top: 2px solid var(--accent);
+  border-top: 2px solid var(--white);
   margin-top: auto;
   z-index: 999;
 }

@@ -4,4 +4,12 @@
   <router-outlet></router-outlet>
 </div>
 
+<button
+  class="chat-fab"
+  *ngIf="isAuthenticated"
+  (click)="router.navigate(['/crear-post'])"
+>
+  <i class="bi bi-plus-lg"></i>
+</button>
+
 <app-footer></app-footer>
