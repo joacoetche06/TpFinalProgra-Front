@@ -34,7 +34,6 @@ export class AuthService {
       const userData = localStorage.getItem('usuario');
       this.usuario = userData ? JSON.parse(userData) : null;
 
-      // Si el token ya expiró, lo limpiamos
       if (token && this.isTokenExpired(token)) {
         this.logout();
       }
@@ -78,7 +77,7 @@ export class AuthService {
           localStorage.setItem('usuario', JSON.stringify(response.user));
         }
         this.usuario = response.user;
-        this.authStatus.next(true); // Notificar cambio
+        this.authStatus.next(true);
       }
       return response;
     } catch (error) {
@@ -93,12 +92,12 @@ export class AuthService {
       localStorage.removeItem('token');
     }
     this.usuario = null;
-    this.authStatus.next(false); // Notificar cambio
+    this.authStatus.next(false);
   }
 
   getCurrentUser(): Observable<any> {
     if (!this.isLoggedIn()) {
-      return of(null); // No hace petición si no hay token
+      return of(null);
     }
 
     return this.http.get(`${this.apiUrl}/auth/current-user`, {
@@ -106,7 +105,7 @@ export class AuthService {
     }).pipe(
       catchError(error => {
         if (error.status === 401) {
-          this.logout(); // Auto-logout si el token es inválido
+          this.logout();
         }
         return throwError(error);
       })

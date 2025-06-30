@@ -1,4 +1,3 @@
-// src/app/components/navbar/navbar.component.ts
 import { Component } from '@angular/core';
 import { Router, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
@@ -27,7 +26,7 @@ export class NavbarComponent {
 
   logout() {
     this.authService.logout();
-    this.usuario = null; // Limpiar el usuario al cerrar sesión
+    this.usuario = null;
     console.log('Usuario deslogueado');
     this.router.navigate(['/login']);
   }

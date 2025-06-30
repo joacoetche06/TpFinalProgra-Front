@@ -6,7 +6,7 @@ import { AuthService } from '../auth/auth.service';
 import { environment } from '../../../environments/environment';
 @Injectable({ providedIn: 'root' })
 export class ComentarioService {
-  private apiUrl = `${environment.apiUrl}/posts`; // Ruta completa
+  private apiUrl = `${environment.apiUrl}/posts`;
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
@@ -19,7 +19,7 @@ export class ComentarioService {
       `${this.apiUrl}/${postId}/comments`,
       {
         params: { offset, limit },
-        headers: this.authService.getAuthHeaders(), // Agregar headers de autenticación
+        headers: this.authService.getAuthHeaders(),
       }
     );
   }
@@ -28,7 +28,6 @@ export class ComentarioService {
     return this.http.post(`${this.apiUrl}/${postId}/comments`, { texto });
   }
 
-  // Agregar estos métodos
   modificarComentario(
     comentarioId: string,
     texto: string

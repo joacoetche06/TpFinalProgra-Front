@@ -3,15 +3,15 @@ import { ActivatedRoute } from '@angular/router';
 import { PostService } from '../../services/post/post.service';
 import { ComentarioService } from '../../services/post/comentario.service';
 import { CommonModule, Location } from '@angular/common';
-import { Post, Comentario } from '../../lib/interfaces'; // Asegúrate de tener la interfaz Comentario
+import { Post, Comentario } from '../../lib/interfaces'; 
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth/auth.service'; // Necesitarás el servicio de autenticación
-import { FormsModule } from '@angular/forms'; // Para usar ngModel
+import { AuthService } from '../../services/auth/auth.service';
+import { FormsModule } from '@angular/forms'; 
 
 @Component({
   selector: 'app-post-content',
   standalone: true,
-  imports: [CommonModule, FormsModule], // Agrega FormsModule aquí
+  imports: [CommonModule, FormsModule], 
   templateUrl: './post-content.component.html',
   styleUrls: ['./post-content.component.css'],
 })
@@ -23,7 +23,7 @@ export class PostContentComponent implements OnInit {
   limit = 3;
   hayMasComentarios = true;
   nuevoComentario = '';
-  usuarioActual: any; // Almacenará la información del usuario logueado
+  usuarioActual: any;
   imageError = false;
   readonly API_URL = 'http://localhost:3000';
 
@@ -39,7 +39,6 @@ export class PostContentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Obtener usuario actual
     this.authService.getCurrentUser().subscribe({
       next: (user) => {
         this.usuarioActual = user;
@@ -50,7 +49,6 @@ export class PostContentComponent implements OnInit {
       },
     });
 
-    // Cargar publicación
     this.postService.getPostById(this.postId).subscribe({
       next: (p: Post) => {
         this.post = p;
@@ -74,7 +72,6 @@ export class PostContentComponent implements OnInit {
       .getComentarios(this.postId, this.offset, this.limit)
       .subscribe({
         next: (resp: any) => {
-          // Inicializar propiedades para edición
           const nuevosComentarios = resp.comentarios.map((c: any) => ({
             ...c,
             editando: false,
@@ -96,15 +93,13 @@ export class PostContentComponent implements OnInit {
       });
   }
 
-  // Función para iniciar la edición de un comentario
   iniciarEdicion(comentario: any) {
     console.log('Autor del comentario:', comentario.autor);
 
     comentario.editando = true;
-    comentario.editText = comentario.texto; // Copiar el texto actual para editar
+    comentario.editText = comentario.texto; 
   }
 
-  // Función para guardar los cambios de un comentario editado
   guardarEdicion(comentario: any) {
     const nuevoTexto = comentario.editText.trim();
     console.log(
@@ -118,33 +113,28 @@ export class PostContentComponent implements OnInit {
         .modificarComentario(comentario._id, nuevoTexto)
         .subscribe({
           next: (comentarioActualizado: Comentario) => {
-            // Actualizar el comentario en la lista
             comentario.texto = comentarioActualizado.texto;
             comentario.modificado = comentarioActualizado.modificado;
             comentario.editando = false;
-            comentario.autor = comentarioActualizado.autor; // Actualizar el autor si es necesario
+            comentario.autor = comentarioActualizado.autor; 
             console.log('Comentario actualizado:', comentario);
           },
           error: (err) => {
             console.error('Error al actualizar comentario:', err);
-            // Revertir cambios en caso de error
             comentario.editText = comentario.texto;
           },
         });
     } else {
-      // Cancelar si no hay cambios
       comentario.editando = false;
     }
   }
 
-  // Función para agregar un nuevo comentario
   agregarComentario() {
     if (this.nuevoComentario.trim()) {
       this.comentarioService
         .agregarComentario(this.postId, this.nuevoComentario.trim())
         .subscribe({
           next: (nuevoComent: any) => {
-            // Agregar el nuevo comentario al principio de la lista
             console.log('Nuevo comentario agregado:', nuevoComent);
             this.comentarios.unshift({
               ...nuevoComent,
