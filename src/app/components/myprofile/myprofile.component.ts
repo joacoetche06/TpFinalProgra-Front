@@ -34,6 +34,9 @@ export class MyProfileComponent implements OnInit {
       this.loadMockData();
     } else {
       this.loadRealData();
+      window.addEventListener('publicacion-creada', () => {
+          this.loadRealData();
+        });
     }
   }
 
@@ -42,8 +45,10 @@ export class MyProfileComponent implements OnInit {
       _id: '123',
       nombre: 'Joaquín',
       nombreUsuario: 'Joacoetche',
-      email: 'joaco@correo.com',
+      correo: 'joaco@correo.com',
       imagenPerfilUrl: '/favicon2.png',
+          perfil: 'user',
+
     };
   }
 
@@ -51,6 +56,7 @@ export class MyProfileComponent implements OnInit {
     this.userService.getMiPerfil().subscribe({
       next: (usuario) => {
         this.usuario = usuario;
+        console.log('Usuario front:', this.usuario);
       },
       error: (err) => {
         if (err.status === 401) {
@@ -60,11 +66,9 @@ export class MyProfileComponent implements OnInit {
     });
 
     const userId = this.authService.getUserId();
-    console.log('ID de usuario:', userId);
     if (userId) {
       this.postService.getPostsByUser(userId, 3).subscribe((response) => {
         this.publicaciones = response.posts;
-        console.log('PPublicaciones obtenidos:', this.publicaciones);
       });
     }
   }
@@ -86,4 +90,17 @@ export class MyProfileComponent implements OnInit {
   verPost(postId: string): void {
     this.router.navigate(['/posts', postId]);
   }
+
+formatFecha(fecha: string | Date): string {
+  if (!fecha) return 'No disponible';
+  
+  const opciones: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC'
+  };
+  
+  return new Date(fecha).toLocaleDateString('es-ES', opciones);
+}
 }

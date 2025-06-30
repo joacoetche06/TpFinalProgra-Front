@@ -1,0 +1,27 @@
+<div class="form-container">
+  <h2>Crear Publicación</h2>
+
+  <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+    <label for="titulo">Título:</label>
+    <input type="text" formControlName="titulo" />
+
+    <label for="descripcion">Descripción:</label>
+    <textarea formControlName="descripcion"></textarea>
+
+    <label for="imagen">Imagen:</label>
+    <input type="file" (change)="onFileSelected($event)" />
+
+    <div class="acciones">
+      <button
+        type="submit"
+        [disabled]="postForm.invalid"
+        class="btn-primary"
+      >
+        Publicar
+      </button>
+      <button type="button" (click)="dialogRef.close()" class="btn-cancelar">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>

@@ -65,4 +65,8 @@ export class PostService {
       headers: this.authService.getAuthHeaders(), // Necesitarás inyectar AuthService o crear un método similar
     });
   }
+
+  crearPublicacion(formData: FormData): Observable<any> {
+    return this.http.post(this.apiUrl, formData);
+  }
 }

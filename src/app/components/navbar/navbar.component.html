@@ -1,7 +1,6 @@
 <nav class="navbar">
   <div class="navbar-brand">MiRedSocial</div>
 
-  <!-- VISTAS SIN LOGUEO -->
   <a routerLink="/register" routerLinkActive="active" *ngIf="!isLoggedIn()"
     >Registro</a
   >
@@ -9,7 +8,6 @@
     >Login</a
   >
 
-  <!-- VISTAS CON LOGUEO -->
   <ng-container *ngIf="isLoggedIn()">
     <a routerLink="/posts" routerLinkActive="active">Inicio</a>
     <a routerLink="/myprofile" routerLinkActive="active">Mi Perfil</a>

@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { isPlatformBrowser } from '@angular/common';
-import { Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Usuario } from '../../lib/interfaces';
 import { environment } from '../../../environments/environment';
@@ -14,6 +14,9 @@ export class AuthService {
   private usuario: Usuario | null = null;
   private modoMock = environment.modoMock;
   private apiUrl = environment.apiUrl;
+    private authStatus = new BehaviorSubject<boolean>(this.isLoggedIn());
+  authStatus$ = this.authStatus.asObservable();
+
   constructor(
     private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: Object
@@ -39,6 +42,8 @@ export class AuthService {
   }
 
   async login(usernameOrEmail: string, password: string) {
+    let response;
+    try {
     if (this.modoMock) {
       if (
         (usernameOrEmail === 'admin' ||
@@ -49,7 +54,8 @@ export class AuthService {
           _id: '1',
           nombre: 'Admin',
           nombreUsuario: 'admin',
-          email: 'admin@correo.com',
+          correo: 'admin@correo.com',
+          perfil: 'user',
         };
         const token = 'mocked-jwt';
         localStorage.setItem('usuario', JSON.stringify(mockedUser));
@@ -60,19 +66,24 @@ export class AuthService {
         return Promise.reject('Usuario o contraseña incorrectos');
       }
     } else {
-      const response = await this.http
-        .post<any>(`${this.apiUrl}/auth/login`, {
-          nombreUsuarioOEmail: usernameOrEmail,
-          password,
-        })
-        .toPromise();
+        response = await this.http
+          .post<any>(`${this.apiUrl}/auth/login`, {
+            nombreUsuarioOEmail: usernameOrEmail,
+            password,
+          })
+          .toPromise();
 
-      if (this.isBrowser()) {
-        localStorage.setItem('token', response.access_token);
-        localStorage.setItem('usuario', JSON.stringify(response.user));
+        if (this.isBrowser()) {
+          localStorage.setItem('token', response.access_token);
+          localStorage.setItem('usuario', JSON.stringify(response.user));
+        }
+        this.usuario = response.user;
+        this.authStatus.next(true); // Notificar cambio
       }
-      this.usuario = response.user;
       return response;
+    } catch (error) {
+      this.authStatus.next(false);
+      throw error;
     }
   }
 
@@ -82,6 +93,24 @@ export class AuthService {
       localStorage.removeItem('token');
     }
     this.usuario = null;
+    this.authStatus.next(false); // Notificar cambio
+  }
+
+  getCurrentUser(): Observable<any> {
+    if (!this.isLoggedIn()) {
+      return of(null); // No hace petición si no hay token
+    }
+
+    return this.http.get(`${this.apiUrl}/auth/current-user`, {
+      headers: this.getAuthHeaders(),
+    }).pipe(
+      catchError(error => {
+        if (error.status === 401) {
+          this.logout(); // Auto-logout si el token es inválido
+        }
+        return throwError(error);
+      })
+    );
   }
 
   getToken(): string | null {
@@ -119,18 +148,18 @@ export class AuthService {
     }
   }
 
-  getCurrentUser(): Observable<any> {
-    return this.http
-      .get(`${this.apiUrl}/auth/current-user`, {
-        headers: this.getAuthHeaders(),
-      })
-      .pipe(
-        catchError((error) => {
-          console.error('Error obteniendo usuario actual:', error);
-          return throwError(error);
-        })
-      );
-  }
+  // getCurrentUser(): Observable<any> {
+  //   return this.http
+  //     .get(`${this.apiUrl}/auth/current-user`, {
+  //       headers: this.getAuthHeaders(),
+  //     })
+  //     .pipe(
+  //       catchError((error) => {
+  //         console.error('Error obteniendo usuario actual:', error);
+  //         return throwError(error);
+  //       })
+  //     );
+  // }
 
   getAuthHeaders(): HttpHeaders {
     const token = this.getToken();

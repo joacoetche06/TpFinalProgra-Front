@@ -21,7 +21,9 @@ export class UserService {
         _id: '123',
         nombre: 'Joaquín Etchegaray',
         nombreUsuario: 'Joacoetche2111',
-        email: 'joaco@correo.com',
+        correo: 'joaco@correo.com',
+          perfil: 'user',
+
         imagenPerfilUrl: 'https://via.placeholder.com/150',
       };
       return of(mockUsuario);

@@ -16,7 +16,16 @@
     <p class="username">{{ usuario.nombreUsuario }}</p>
     <h2>{{ usuario.nombre }}</h2>
     <p class="email">
-      <strong>Email:</strong> {{ usuario.email || "No disponible" }}
+      <strong>Email:</strong> {{ usuario.correo || "No disponible" }}
+    </p>
+    <p class="email">
+      <strong>Fecha de nacimiento:</strong> {{ usuario.fechaNacimiento ? formatFecha(usuario.fechaNacimiento) : "No disponible" }}
+    </p>
+    <p class="email">
+      <strong>Descripción:</strong> {{ usuario.descripcion || "No disponible" }}
+    </p>
+    <p class="email">
+      <strong>Perfil:</strong> {{ usuario.perfil || "No disponible" }}
     </p>
   </div>
 

@@ -41,6 +41,9 @@ export class PostsComponent implements OnInit {
       if (id) {
         this.usuarioActualId = id;
         this.cargarPublicaciones();
+        window.addEventListener('publicacion-creada', () => {
+          this.cargarPublicaciones();
+        });
       } else {
         console.error('ID de usuario no disponible');
         this.router.navigate(['/login']);

@@ -48,14 +48,13 @@
   transform-origin: left;
 }
 
-.navbar a.active {
-  color: chartreuse;
-  background: rgba(0, 255, 157, 0.1);
+.active {
+  color: chartreuse !important;
+  background: rgba(0, 255, 157, 0.1) !important;
 }
 
-.navbar a.active::before {
-  transform: scaleX(1);
-  background: #00ff99;
+.active:hover {
+  color: chartreuse !important;
 }
 
 .navbar button {

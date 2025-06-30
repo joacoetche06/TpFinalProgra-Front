@@ -29,6 +29,9 @@ export interface Usuario {
   _id: string;
   nombre: string;
   nombreUsuario: string;
-  email: string;
+  correo: string;
+  descripcion?: string;
+  fechaNacimiento? : Date | string; // Fecha de nacimiento
+  perfil: string; // URL del perfil
   imagenPerfilUrl?: string; // URL de imagen
 }

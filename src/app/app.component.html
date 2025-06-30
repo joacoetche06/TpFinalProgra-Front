@@ -7,9 +7,10 @@
 <button
   class="chat-fab"
   *ngIf="isAuthenticated"
-  (click)="router.navigate(['/crear-post'])"
+  (click)="abrirCrearPost()"
 >
   <i class="bi bi-plus-lg"></i>
 </button>
+
 
 <app-footer></app-footer>

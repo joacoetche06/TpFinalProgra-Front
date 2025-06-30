@@ -23,3 +23,7 @@
   cursor: pointer;
   z-index: 1000;
 }
+
+.chat-fab:hover {
+  background-color: darkred;
+}
