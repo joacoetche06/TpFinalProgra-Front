@@ -10,6 +10,8 @@ import { Usuario } from '../../lib/interfaces';
 import { Router } from '@angular/router';
 import { UsuarioPipe } from '../../pipes/usuario.pipe';
 import { environment } from '../../../environments/environment';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalComponent } from '../modal/modal.component'; // ajustá el path
 
 @Component({
   selector: 'app-posts',
@@ -29,30 +31,38 @@ export class PostsComponent implements OnInit {
   imageError = false;
   private modoMock = environment.modoMock;
   private API_URL = environment.apiUrl;
+
+usuarioActual: any;
+
   constructor(
     private router: Router,
     private postService: PostService,
-    private authService: AuthService
+    private authService: AuthService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
-    if (this.authService.isLoggedIn()) {
-      const id = this.authService.getUserId();
-      if (id) {
-        this.usuarioActualId = id;
+  if (this.authService.isLoggedIn()) {
+    this.authService.getCurrentUser().subscribe((usuario) => {
+      if (usuario) {
+        this.usuarioActual = usuario;
+        this.usuarioActualId = usuario._id;
         this.cargarPublicaciones();
+
         window.addEventListener('publicacion-creada', () => {
           this.cargarPublicaciones();
         });
       } else {
-        console.error('ID de usuario no disponible');
+        console.error('No se pudo obtener el usuario');
         this.router.navigate(['/login']);
       }
-    } else {
-      console.warn('Usuario no autenticado, redirigiendo...');
-      this.router.navigate(['/login']);
-    }
+    });
+  } else {
+    console.warn('Usuario no autenticado, redirigiendo...');
+    this.router.navigate(['/login']);
   }
+}
+
 
   cargarPublicaciones(): void {
     if (this.modoMock) {
@@ -137,4 +147,37 @@ export class PostsComponent implements OnInit {
       ? imagePath
       : `${this.API_URL}${imagePath}`;
   }
+
+  eliminarPublicacion(postId: string) {
+  const dialogRef = this.dialog.open(ModalComponent, {
+    width: '400px',
+    data: {
+      message: '¿Estás seguro de que querés eliminar esta publicación?'
+    }
+  });
+
+  dialogRef.afterClosed().subscribe((confirmado: boolean) => {
+    if (confirmado) {
+      this.postService.eliminarPost(postId).subscribe({
+        next: () => this.cargarPublicaciones(),
+        error: (err) => {
+          console.error('Error al eliminar publicación', err);
+          alert('No se pudo eliminar la publicación');
+        }
+      });
+    }
+  });
+}
+
+
+
+esUsuarioAutor(autor: string | Usuario): boolean {
+  return this.usuarioActual?._id === (autor as Usuario)._id;
+}
+
+isAdmin(): boolean {
+  return this.usuarioActual?.perfil === 'admin';
+}
+
+
 }

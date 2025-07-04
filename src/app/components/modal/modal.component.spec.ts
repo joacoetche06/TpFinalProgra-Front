@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ConfirmSessionComponent } from './confirm-session.component';
+import { ConfirmSessionComponent } from './modal.component';
 
 describe('ConfirmSessionComponent', () => {
   let component: ConfirmSessionComponent;

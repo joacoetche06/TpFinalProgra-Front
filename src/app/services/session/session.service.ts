@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, timer, Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmSessionComponent } from '../../components/modal/confirm-session/confirm-session.component';
+import { ModalComponent } from '../../components/modal/modal.component';
 import { AuthService } from '../auth/auth.service';
 import { Router } from '@angular/router';
 @Injectable({
@@ -11,7 +11,6 @@ export class SessionService {
   private sessionTimeoutSubscription?: Subscription;
   private countdownSubscription?: Subscription;
 
-  // Observable para que los componentes sepan si la sesión está activa
   sessionActive$ = new BehaviorSubject<boolean>(true);
 
   constructor(
@@ -32,7 +31,7 @@ export class SessionService {
 
   private promptSessionExtension() {
     // Abrir diálogo para preguntar si quiere extender la sesión
-    const dialogRef = this.dialog.open(ConfirmSessionComponent, {
+    const dialogRef = this.dialog.open(ModalComponent, {
       width: '350px',
       disableClose: true,
       data: { message: 'Quedan 5 minutos de sesión. ¿Deseas extenderla?' },
@@ -66,7 +65,7 @@ export class SessionService {
   endSession() {
     this.sessionActive$.next(false);
     this.dialog
-      .open(ConfirmSessionComponent, {
+      .open(ModalComponent, {
         width: '350px',
         disableClose: true,
         data: {

@@ -50,6 +50,14 @@
       <div class="ver-detalles">
         <button (click)="verPost(post._id)">Ver publicación completa</button>
       </div>
+      <div
+        class="boton-eliminar"
+        *ngIf="esUsuarioAutor(post.autor | usuarioProp) || isAdmin()"
+      >
+        <button (click)="eliminarPublicacion(post._id)">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
     </div>
   </div>
 </div>

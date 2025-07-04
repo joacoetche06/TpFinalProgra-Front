@@ -9,13 +9,13 @@ import {
 @Component({
   selector: 'app-confirm-session',
   imports: [CommonModule, MatDialogModule],
-  templateUrl: './confirm-session.component.html',
-  styleUrl: './confirm-session.component.css',
+  templateUrl: './modal.component.html',
+  styleUrl: './modal.component.css',
 })
-export class ConfirmSessionComponent {
+export class ModalComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private dialogRef: MatDialogRef<ConfirmSessionComponent>
+    private dialogRef: MatDialogRef<ModalComponent>
   ) {}
 
   onYes() {

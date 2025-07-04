@@ -36,3 +36,7 @@ button[mat-button][color="primary"] {
 button[mat-button][color="primary"]:hover {
   background-color: #b71c1c;
 }
+
+.mat-mdc-dialog-surface{
+  background-color: rgb(184, 184, 184) !important;
+}

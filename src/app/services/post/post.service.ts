@@ -69,4 +69,11 @@ export class PostService {
   crearPublicacion(formData: FormData): Observable<any> {
     return this.http.post(this.apiUrl, formData);
   }
+
+  eliminarPost(postId: string): Observable<any> {
+  return this.http.delete(`${this.apiUrl}/${postId}`, {
+    headers: this.authService.getAuthHeaders(),
+  });
+}
+
 }
