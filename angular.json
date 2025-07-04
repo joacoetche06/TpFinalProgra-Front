@@ -11,11 +11,11 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/tp-final-etchegaray-front",
             "index": "src/index.html",
-            "browser": "src/main.ts",
+            "main": "src/main.ts",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "assets": [
@@ -25,7 +25,9 @@
               }
             ],
             "styles": ["src/styles.css"],
-            "scripts": []
+            "scripts": [],
+            "serviceWorker": true, 
+            "ngswConfigPath": "ngsw-config.json"
           },
           "configurations": {
             "production": {
@@ -91,7 +93,6 @@
           "builder": "@angular-devkit/build-angular:prerender",
           "options": {
             "browserTarget": "TpFinalEtchegaray-Front:build:production",
-            "serverTarget": "TpFinalEtchegaray-Front:server:production",
             "routes": [
               "/login",
               "/register",

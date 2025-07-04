@@ -10,6 +10,7 @@ mat-dialog-actions {
   gap: 10px;
 }
 
+
 button[mat-button] {
   padding: 8px 16px;
   font-weight: 600;
@@ -37,6 +38,6 @@ button[mat-button][color="primary"]:hover {
   background-color: #b71c1c;
 }
 
-.mat-mdc-dialog-surface{
-  background-color: rgb(184, 184, 184) !important;
+.modal-content{
+  background-color: rgb(110, 109, 109) !important;
 }
