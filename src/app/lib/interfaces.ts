@@ -31,7 +31,8 @@ export interface Usuario {
   nombreUsuario: string;
   correo: string;
   descripcion?: string;
-  fechaNacimiento? : Date | string; // Fecha de nacimiento
+  fechaNacimiento?: Date | string; // Fecha de nacimiento
   perfil: string; // URL del perfil
   imagenPerfilUrl?: string; // URL de imagen
+  isActive?: boolean; // Indica si el usuario está activo
 }

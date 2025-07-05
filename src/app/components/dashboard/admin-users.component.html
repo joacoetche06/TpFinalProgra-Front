@@ -1,0 +1,19 @@
+<h2>Gestión de Usuarios</h2>
+
+<form [formGroup]="form" (ngSubmit)="registrarUsuario()">
+  <input formControlName="nombre" placeholder="Nombre" />
+  <input formControlName="nombreUsuario" placeholder="Usuario" />
+  <input formControlName="correo" placeholder="Correo" />
+  <input formControlName="password" type="password" placeholder="Contraseña" />
+  <button type="submit">Registrar</button>
+</form>
+
+<ul>
+  <li *ngFor="let u of usuarios">
+    {{ u.nombre }} - {{ u.nombreUsuario }} -
+    {{ u.isActive ? "Activo" : "Inactivo" }}
+    <button (click)="cambiarEstado(u)">
+      {{ u.isActive ? "Dar de baja" : "Dar de alta" }}
+    </button>
+  </li>
+</ul>

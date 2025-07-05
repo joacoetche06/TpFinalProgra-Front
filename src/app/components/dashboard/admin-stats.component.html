@@ -1,0 +1,19 @@
+<h2>Estadísticas</h2>
+<label>
+  Desde:
+  <input type="date" [(ngModel)]="from" />
+</label>
+<label>
+  Hasta:
+  <input type="date" [(ngModel)]="to" />
+</label>
+<button (click)="cargarEstadisticas()">Actualizar</button>
+
+<h3>Publicaciones por usuario</h3>
+<canvas baseChart [data]="publicacionesChart" chartType="bar"></canvas>
+
+<h3>Comentarios en total</h3>
+<canvas baseChart [data]="comentariosChart" chartType="line"></canvas>
+
+<h3>Comentarios por publicación</h3>
+<canvas baseChart [data]="comentariosPorPostChart" chartType="bar"></canvas>

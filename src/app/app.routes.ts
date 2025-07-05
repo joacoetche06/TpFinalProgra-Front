@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './guard/auth.guard';
+import { AdminGuard } from './guard/admin.guard';
 
 export const routes: Routes = [
   {
@@ -51,6 +52,22 @@ export const routes: Routes = [
       import('./components/loading/loading.component').then(
         (m) => m.LoadingComponent
       ),
+  },
+  {
+    path: 'dashboard/usuarios',
+    loadComponent: () =>
+      import('./components/dashboard/admin-users.component').then(
+        (m) => m.AdminUsersComponent
+      ),
+    canActivate: [AuthGuard, AdminGuard],
+  },
+  {
+    path: 'dashboard/estadisticas',
+    loadComponent: () =>
+      import('./components/dashboard/admin-stats.component').then(
+        (m) => m.AdminStatsComponent
+      ),
+    canActivate: [AuthGuard, AdminGuard],
   },
   {
     path: '**',

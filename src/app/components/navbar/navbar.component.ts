@@ -3,6 +3,7 @@ import { Router, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { Usuario } from '../../lib/interfaces';
 
 @Component({
   selector: 'app-navbar',
@@ -13,13 +14,13 @@ import { RouterLink } from '@angular/router';
 })
 export class NavbarComponent {
   constructor(private authService: AuthService, private router: Router) {}
-  usuario: string | null = null;
+  usuario: Usuario | null = null;
 
   isLoggedIn(): boolean {
     const logged = this.authService.isLoggedIn();
     if (logged && !this.usuario) {
-      this.usuario = this.authService.getUsuario()?.nombreUsuario ?? null;
-      console.log('Usuario logueado:', this.usuario);
+      this.usuario = this.authService.getUsuario() ?? null;
+      console.log('Usuario logueado:', this.usuario?.nombreUsuario);
     }
     return logged;
   }
@@ -29,5 +30,8 @@ export class NavbarComponent {
     this.usuario = null;
     console.log('Usuario deslogueado');
     this.router.navigate(['/login']);
+  }
+  isAdmin(): boolean {
+    return this.usuario?.perfil === 'admin';
   }
 }

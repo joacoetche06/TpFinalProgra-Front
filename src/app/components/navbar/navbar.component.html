@@ -11,8 +11,20 @@
   <ng-container *ngIf="isLoggedIn()">
     <a routerLink="/posts" routerLinkActive="active">Inicio</a>
     <a routerLink="/myprofile" routerLinkActive="active">Mi Perfil</a>
+    <a
+      routerLink="/dashboard/estadisticas"
+      routerLinkActive="active"
+      *ngIf="isAdmin()"
+      >Dashboard
+    </a>
+    <a
+      routerLink="/dashboard/usuarios"
+      routerLinkActive="active"
+      *ngIf="isAdmin()"
+      >Usuarios
+    </a>
     <span class="navbar-usuario"
-      ><strong>{{ usuario }}</strong></span
+      ><strong>{{ usuario?.nombreUsuario }}</strong></span
     >
     <a href="#" (click)="logout(); $event.preventDefault()">Cerrar sesión</a>
   </ng-container>
