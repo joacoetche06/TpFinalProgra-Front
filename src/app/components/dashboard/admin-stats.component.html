@@ -1,19 +1,35 @@
-<h2>Estadísticas</h2>
-<label>
-  Desde:
-  <input type="date" [(ngModel)]="from" />
-</label>
-<label>
-  Hasta:
-  <input type="date" [(ngModel)]="to" />
-</label>
-<button (click)="cargarEstadisticas()">Actualizar</button>
+<div class="container">
+  <h2>Estadísticas</h2>
+  <div class="stats-container">
+    <div>
+      <label>
+        Desde:
+        <input type="date" [(ngModel)]="from" />
+      </label>
+      <label>
+        Hasta:
+        <input type="date" [(ngModel)]="to" />
+      </label>
+      <button (click)="cargarEstadisticas()">Actualizar</button>
+    </div>
 
-<h3>Publicaciones por usuario</h3>
-<canvas baseChart [data]="publicacionesChart" chartType="bar"></canvas>
+    <div class="chart-container">
+      <h3>Publicaciones por usuario</h3>
+      <canvas baseChart [data]="publicacionesChart" chartType="bar"></canvas>
+    </div>
 
-<h3>Comentarios en total</h3>
-<canvas baseChart [data]="comentariosChart" chartType="line"></canvas>
+    <div class="chart-container">
+      <h3>Comentarios en total</h3>
+      <canvas baseChart [data]="comentariosChart" chartType="line"></canvas>
+    </div>
 
-<h3>Comentarios por publicación</h3>
-<canvas baseChart [data]="comentariosPorPostChart" chartType="bar"></canvas>
+    <div class="chart-container">
+      <h3>Comentarios por publicación</h3>
+      <canvas
+        baseChart
+        [data]="comentariosPorPostChart"
+        chartType="bar"
+      ></canvas>
+    </div>
+  </div>
+</div>
