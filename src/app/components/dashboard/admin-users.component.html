@@ -1,26 +1,208 @@
 <div class="container">
-  <h2>Gestión de Usuarios</h2>
+  <h2>Registrar nuevo usuario</h2>
 
   <form [formGroup]="form" (ngSubmit)="registrarUsuario()">
-    <input formControlName="nombre" placeholder="Nombre" />
-    <input formControlName="nombreUsuario" placeholder="Usuario" />
-    <input formControlName="correo" placeholder="Correo" />
-    <input
-      formControlName="password"
-      type="password"
-      placeholder="Contraseña"
-    />
-    <button type="submit">Registrar</button>
+    <!-- Nombre -->
+    <div>
+      <label for="nombre"> Nombre <span class="required">*</span> </label>
+      <input
+        id="nombre"
+        type="text"
+        formControlName="nombre"
+        [class.invalid]="
+          form.get('nombre')?.invalid && form.get('nombre')?.touched
+        "
+        placeholder="Juan"
+      />
+      <div
+        *ngIf="form.get('nombre')?.invalid && form.get('nombre')?.touched"
+        class="error-msg"
+      >
+        El nombre es obligatorio.
+      </div>
+    </div>
+
+    <!-- Apellido -->
+    <div>
+      <label for="apellido"> Apellido <span class="required">*</span> </label>
+      <input
+        id="apellido"
+        type="text"
+        formControlName="apellido"
+        [class.invalid]="
+          form.get('apellido')?.invalid && form.get('apellido')?.touched
+        "
+        placeholder="Pérez"
+      />
+      <div
+        *ngIf="form.get('apellido')?.invalid && form.get('apellido')?.touched"
+        class="error-msg"
+      >
+        El apellido es obligatorio.
+      </div>
+    </div>
+
+    <!-- Correo -->
+    <div>
+      <label for="correo">
+        Correo electrónico <span class="required">*</span>
+      </label>
+      <input
+        id="correo"
+        type="email"
+        formControlName="correo"
+        [class.invalid]="
+          form.get('correo')?.invalid && form.get('correo')?.touched
+        "
+        placeholder="ejemplo@correo.com"
+      />
+      <div
+        *ngIf="form.get('correo')?.touched && form.get('correo')?.invalid"
+        class="error-msg"
+      >
+        <div *ngIf="form.get('correo')?.errors?.['required']">
+          El correo es obligatorio.
+        </div>
+        <div *ngIf="form.get('correo')?.errors?.['email']">
+          Correo inválido.
+        </div>
+      </div>
+    </div>
+
+    <!-- Usuario -->
+    <div>
+      <label for="nombreUsuario">
+        Nombre de usuario <span class="required">*</span>
+      </label>
+      <input
+        id="nombreUsuario"
+        type="text"
+        formControlName="nombreUsuario"
+        [class.invalid]="
+          form.get('nombreUsuario')?.invalid &&
+          form.get('nombreUsuario')?.touched
+        "
+        placeholder="juanp123"
+      />
+      <div
+        *ngIf="
+          form.get('nombreUsuario')?.invalid &&
+          form.get('nombreUsuario')?.touched
+        "
+        class="error-msg"
+      >
+        El nombre de usuario es obligatorio.
+      </div>
+    </div>
+
+    <!-- Fecha de nacimiento -->
+    <div>
+      <label for="fechaNacimiento">Fecha de nacimiento</label>
+      <input
+        id="fechaNacimiento"
+        type="date"
+        formControlName="fechaNacimiento"
+      />
+    </div>
+
+    <!-- Descripción -->
+    <div>
+      <label for="descripcion">Descripción</label>
+      <textarea
+        id="descripcion"
+        rows="2"
+        formControlName="descripcion"
+        placeholder="Contanos algo sobre vos"
+      ></textarea>
+    </div>
+
+    <!-- Imagen de perfil -->
+    <div>
+      <label for="imagenPerfil">Imagen de perfil</label>
+      <input
+        id="imagenPerfil"
+        type="file"
+        (change)="onFileSelected($event)"
+        accept="image/*"
+      />
+    </div>
+
+    <div>
+      <label for="imagenPerfil" hidden>Imagen de perfil</label>
+      <input
+        id="imagenPerfil"
+        type="file"
+        (change)="onFileSelected($event)"
+        accept="image/*"
+        hidden
+      />
+    </div>
+
+    <!-- Contraseña -->
+    <div>
+      <label for="password"> Contraseña <span class="required">*</span> </label>
+      <input
+        id="password"
+        type="password"
+        formControlName="password"
+        [class.invalid]="
+          form.get('password')?.invalid && form.get('password')?.touched
+        "
+        placeholder="********"
+      />
+      <div
+        *ngIf="form.get('password')?.touched && form.get('password')?.invalid"
+        class="error-msg"
+      >
+        <div *ngIf="form.get('password')?.errors?.['required']">
+          La contraseña es obligatoria.
+        </div>
+        <div *ngIf="form.get('password')?.errors?.['pattern']">
+          Debe tener al menos 8 caracteres, una mayúscula y un número.
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirmar contraseña -->
+    <div>
+      <label for="confirmPassword">
+        Confirmar contraseña <span class="required">*</span>
+      </label>
+      <input
+        id="confirmPassword"
+        type="password"
+        formControlName="confirmPassword"
+        [class.invalid]="
+          form.get('confirmPassword')?.touched &&
+          form.get('confirmPassword')?.value !== form.get('password')?.value
+        "
+        placeholder="********"
+      />
+      <div
+        *ngIf="
+          form.get('confirmPassword')?.touched &&
+          form.get('confirmPassword')?.value !== form.get('password')?.value
+        "
+        class="error-msg"
+      >
+        Las contraseñas no coinciden.
+      </div>
+    </div>
+
+    <!-- Botón -->
+    <button type="submit" [disabled]="form.invalid">Registrar usuario</button>
   </form>
 
+  <!-- Lista de usuarios -->
+  <h2>Usuarios</h2>
   <ul>
-    <li *ngFor="let u of usuarios">
-      <span
-        >{{ u.nombre }} - {{ u.nombreUsuario }} -
-        {{ u.isActive ? "Activo" : "Inactivo" }}</span
+    <li *ngFor="let usuario of usuarios">
+      <span>{{ usuario.nombreUsuario }} - {{ usuario.correo }}</span>
+      <button
+        (click)="cambiarEstado(usuario)"
+        [ngClass]="usuario.isActive ? 'btn-baja' : 'btn-alta'"
       >
-      <button (click)="cambiarEstado(u)">
-        {{ u.isActive ? "Dar de baja" : "Dar de alta" }}
+        {{ usuario.isActive ? "Dar de Baja" : "Dar de Alta" }}
       </button>
     </li>
   </ul>

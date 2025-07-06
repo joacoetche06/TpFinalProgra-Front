@@ -1,7 +1,9 @@
 .container {
   max-width: 800px;
-  margin: 0 auto;
+  margin: 1rem auto;
   padding: 1rem;
+  background-color: #ffffff;
+  border-radius: 10px;
 }
 
 h2 {
@@ -19,13 +21,47 @@ form {
   margin-bottom: 2rem;
 }
 
-form input {
+/* Estilos heredados del RegisterComponent */
+label {
+  display: block;
+  font-weight: 600;
+  color: #444;
+}
+
+input,
+textarea {
+  width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-top: 4px;
+  transition: border-color 0.3s;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #c62828;
+  outline: none;
+}
+
+input.invalid,
+textarea.invalid {
+  border-color: #d32f2f;
+}
+
+.required {
+  color: red;
+  margin-left: 4px;
+}
+
+.error-msg {
+  grid-column: 1 / -1;
+  color: #d32f2f;
   font-size: 14px;
 }
 
+/* Botón en toda la fila */
 form button {
   grid-column: 1 / -1;
   background-color: #c62828;
@@ -42,6 +78,7 @@ form button:hover {
   background-color: #b71c1c;
 }
 
+/* Lista de usuarios */
 ul {
   list-style: none;
   padding: 0;
@@ -63,7 +100,6 @@ li span {
 }
 
 li button {
-  background-color: #eeeeee;
   border: none;
   padding: 8px 12px;
   border-radius: 6px;
@@ -72,6 +108,20 @@ li button {
   transition: background-color 0.3s;
 }
 
-li button:hover {
-  background-color: #e0e0e0;
+li button.btn-baja {
+  background-color: #e53935 !important;
+  color: white !important;
+}
+
+li button.btn-baja:hover {
+  background-color: #c62828 !important;
+}
+
+li button.btn-alta {
+  background-color: #43a047 !important;
+  color: white !important;
+}
+
+li button.btn-alta:hover {
+  background-color: #2e7d32 !important;
 }

@@ -1,7 +1,8 @@
 :host {
   display: block;
-  max-width: 800px;
-  margin: 40px auto;
+  width: calc(100% - 200px); /* 100% del padre menos márgenes */
+  max-width: 1200px; /* Límite máximo */
+  margin: 40px auto; /* Centrado */
   padding: 0 16px;
 }
 
@@ -192,6 +193,8 @@ h3 {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   padding: 20px;
   margin-bottom: 24px;
+  width: 100%; /* Ocupa todo el ancho disponible */
+  box-sizing: border-box; /* Incluye padding en el ancho total */
 }
 
 .post-card h2 {
